@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    tools:context=".MenuFragment.KasirFragment">
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_60sdp"
+        app:cornerRadius="@dimen/_10sdp"
+        app:icon="@drawable/qr_code"
+        app:iconSize="@dimen/_40sdp"
+        android:text="Scan Barang"
+        android:textSize="@dimen/_15ssp"
+        app:iconGravity="textEnd"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:id="@+id/btnScanQR"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_marginVertical="@dimen/_10sdp"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/adapter_list_barang_cart"
+        android:layout_below="@id/btnScanQR"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:id="@+id/rvcartBarang"/>
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="@dimen/_200sdp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginVertical="@dimen/_20sdp"
+        app:cornerRadius="@dimen/_10sdp"
+        app:icon="@drawable/buy_for_change_50px"
+        android:id="@+id/btn_Transaksi"/>
+
+
+</RelativeLayout>

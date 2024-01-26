@@ -1,0 +1,1200 @@
+definitions:
+  request.AuthRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  request.BarangRequest:
+    properties:
+      code:
+        type: string
+      merek:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      stok:
+        type: integer
+      tipe:
+        type: string
+    type: object
+  request.MemberRequest:
+    properties:
+      address:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+    type: object
+  request.PembelianBarangRequest:
+    properties:
+      barang_id:
+        type: integer
+      discount:
+        type: number
+      quantity:
+        type: integer
+      sub_total_harga:
+        type: number
+      transaksi_id:
+        type: integer
+    type: object
+  request.RegisterKaryawan:
+    properties:
+      nama_karyawan:
+        type: string
+      nik:
+        type: string
+      username:
+        type: string
+    type: object
+  request.RegisterKaryawanRequest:
+    properties:
+      nama_petugas:
+        type: string
+      nik:
+        type: string
+      password:
+        type: string
+      telp:
+        type: string
+      toko_name:
+        type: string
+      username:
+        type: string
+    type: object
+  request.RequestBiayaTransaksi:
+    properties:
+      code_voucer:
+        type: string
+      id_Member:
+        type: string
+      nominal_pembayaran:
+        type: number
+      total_price:
+        type: number
+    type: object
+  request.RequestTransaksi:
+    properties:
+      code_voucer:
+        type: string
+      karyawan_id:
+        type: number
+      kembalian:
+        type: number
+      member_id:
+        type: integer
+      nominal_pembayaran:
+        type: number
+      point:
+        type: integer
+      ppn:
+        type: number
+      total_price:
+        type: number
+    type: object
+  request.TokoProfileRequest:
+    properties:
+      alamat:
+        type: string
+      email:
+        type: string
+      name_toko:
+        type: string
+      npwp:
+        type: string
+      telp:
+        type: string
+    type: object
+  request.UpdateKaryawanRequest:
+    properties:
+      nama_petugas:
+        type: string
+      nik:
+        type: string
+      telp:
+        type: string
+      toko_name:
+        type: string
+      username:
+        type: string
+    type: object
+  request.UpdatePassRequest:
+    properties:
+      password_new:
+        type: string
+      password_old:
+        type: string
+    type: object
+  request.ValidateMemberRequest:
+    properties:
+      code:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    type: object
+  request.VoucersRequest:
+    properties:
+      discount:
+        type: number
+      end_date:
+        type: string
+      is_active:
+        type: string
+      start_date:
+        type: string
+    type: object
+  response.ResponseAuthSuccess:
+    properties:
+      status:
+        type: string
+      token:
+        type: string
+    type: object
+  response.ResponseDataSuccess:
+    properties:
+      data:
+        type: string
+      status:
+        type: string
+    type: object
+  response.ResponseError:
+    properties:
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+info:
+  contact:
+    email: fiber@swagger.io
+    name: API Support
+  description: This is a sample swagger for Fiber
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Fiber Example API
+  version: "1.0"
+paths:
+  /api/admin:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Admin
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.RegisterKaryawanRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Admin
+  /api/admin/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Karyawan ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Admin
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Karyawan ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Admin
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Karyawan ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdateKaryawanRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Admin
+  /api/admin/resetPass/{id}:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Karyawan ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdatePassRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Admin
+  /api/auth:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate a user and generate a token based on the provided
+        credentials.
+      parameters:
+      - description: Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.AuthRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseAuthSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      summary: Authenticate a user and generate a token
+      tags:
+      - Authorization
+  /api/barang:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Nama filter
+        in: query
+        name: nama
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Barang
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.BarangRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Barang
+  /api/barang/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Petugas ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Barang
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Barang ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Barang
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Member ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.BarangRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Barang
+  /api/barang/WithQr/{code}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Barang Code
+        in: path
+        name: code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Barang
+  /api/karyawan:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Karyawan
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.RegisterKaryawanRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Karyawan
+  /api/karyawan/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Karyawan ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Karyawan
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Karyawan ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Karyawan
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Karyawan ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdateKaryawanRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Karyawan
+  /api/me:
+    get:
+      consumes:
+      - application/json
+      description: Authenticate a user and generate a token based on the provided
+        credentials.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseAuthSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      summary: Authenticate a user and generate a token
+      tags:
+      - Authorization
+  /api/members:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Members
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.MemberRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Members
+  /api/members/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Member ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Members
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Member ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Members
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Member ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.MemberRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Members
+  /api/pembelianbarang:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud PembelianBarang
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.PembelianBarangRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud PembelianBarang
+  /api/pembelianbarang/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Member ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud PembelianBarang
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: PembelianBarang ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud PembelianBarang
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: PembelianBarang ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.PembelianBarangRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud PembelianBarang
+  /api/registerKaryawan:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.RegisterKaryawan'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Register
+  /api/tokoprofile:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud TokoProfile
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.TokoProfileRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud TokoProfile
+  /api/tokoprofile/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Toko ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud TokoProfile
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Toko ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud TokoProfile
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Toko ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.TokoProfileRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud TokoProfile
+  /api/transaksi:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Transaksi
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.RequestTransaksi'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Transaksi
+  /api/transaksi/addmember:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.ValidateMemberRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Transaksi
+  /api/transaksi/calculate:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.RequestBiayaTransaksi'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Transaksi
+  /api/voucer:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Voucers
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.VoucersRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Voucers
+  /api/voucer/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Member ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Voucers
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Member ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Voucers
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Member ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.VoucersRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Voucers
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

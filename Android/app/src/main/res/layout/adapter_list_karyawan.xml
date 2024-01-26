@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="@dimen/_5sdp"
+    app:cardElevation="@dimen/_5sdp"
+    android:elevation="@dimen/_10sdp"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvName"
+                android:text="Fadlan"
+                android:layout_marginHorizontal="@dimen/_3sdp"
+                android:fontFamily="@font/poppinsbold"
+                android:textSize="@dimen/_14ssp"/>
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvNik"
+            android:text="898098782341"
+            android:fontFamily="@font/poppinsregular"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                app:cornerRadius="@dimen/_5sdp"
+                android:id="@+id/btnUpdate"
+                android:text="Update"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_35sdp"
+                android:text="Delete"
+                app:cornerRadius="@dimen/_5sdp" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+
+</androidx.cardview.widget.CardView>

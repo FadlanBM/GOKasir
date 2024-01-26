@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="@dimen/_5sdp"
+    android:layout_marginVertical="@dimen/_5sdp"
+    android:elevation="@dimen/_10sdp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="@dimen/_10sdp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvNamaBarangCart"
+                android:text="Sarimi"
+                android:textColor="@color/black"
+                android:layout_marginHorizontal="@dimen/_3sdp"
+                android:fontFamily="@font/poppinsbold"
+                android:textSize="@dimen/_10ssp"/>
+            <TextView
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvPriceBarangCart"
+                android:text="Price"
+                android:textColor="@color/blue"
+                android:layout_marginHorizontal="@dimen/_3sdp"
+                android:fontFamily="@font/poppinsbold"
+                android:textSize="@dimen/_14ssp"/>
+            <TextView
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvCodeBarangCart"
+                android:text="898098782341"
+                android:fontFamily="@font/poppinsregular"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                >
+
+                <ImageView
+                    android:id="@+id/btnPlusCart"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/plus_50px" />
+
+                <TextView
+                    android:layout_width="35dp"
+                    android:layout_height="39dp"
+                    android:layout_marginHorizontal="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_3sdp"
+                    android:text="12"
+                    android:id="@+id/tvJumCart"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_23sdp"
+                    app:cornerRadius="@dimen/_5sdp" />
+               <ImageView
+                   android:layout_width="@dimen/_25sdp"
+                   android:layout_height="@dimen/_25sdp"
+                   android:src="@drawable/minus_50px"
+                   android:id="@+id/btnMinusCart"
+                   android:layout_gravity="center_vertical"/>
+            </LinearLayout>
+        </LinearLayout>
+</androidx.cardview.widget.CardView>

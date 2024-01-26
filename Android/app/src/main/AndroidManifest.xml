@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <application
+        android:name=".Util.MyApp"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.KasirGo"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="31">
+        <activity
+            android:name=".ui.setting.ResetPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.setting.UbahDataActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.setting.DataPribadiActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.setting.MainSettingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TransaksiActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.admin.CreateAdminActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.Vouchers.UpdateVoucerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.Vouchers.CreateVoucerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.barang.UpdateBarangActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.barang.CreateBarangActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.barang.ScanBCBarangActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.karyawan.UpdateKaryawanActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.karyawan.CreateKaryawanActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MenuAdminActivity"
+            android:exported="false"
+            android:label="@string/title_activity_menu_admin"
+            android:theme="@style/Theme.KasirGo.NoActionBar" />
+        <activity
+            android:name=".MenuKasirActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_admin"
+            android:icon="@drawable/baseline_home_24"
+            android:title="@string/menu_admin" />
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@drawable/customer_support_50px"
+            android:title="@string/menu_karyawan" />
+        <item
+            android:id="@+id/nav_slideshow"
+            android:icon="@drawable/deployment_50px"
+            android:title="@string/menu_barang" />
+        <item
+            android:id="@+id/nav_voucer"
+            android:icon="@drawable/redeem_50px"
+            android:title="@string/menu_voucers" />
+       <!-- <item
+            android:id="@+id/nav_member"
+            android:icon="@drawable/member_50px"
+            android:title="@string/menu_member" />-->
+    </group>
+</menu>
