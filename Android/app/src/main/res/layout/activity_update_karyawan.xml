@@ -83,13 +83,13 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSubmit"
             android:layout_width="match_parent"
             android:layout_height="60sp"
-            android:layout_marginVertical="@dimen/_20sdp"
-            app:cornerRadius="@dimen/_10sdp"
             android:layout_marginHorizontal="@dimen/_20sdp"
-            android:id="@+id/btnSubmit"
-            android:text="Submit"/>
+            android:layout_marginVertical="@dimen/_20sdp"
+            android:text="Submit"
+            app:cornerRadius="@dimen/_10sdp" />
 
     </LinearLayout>
 </RelativeLayout>

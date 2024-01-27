@@ -20,9 +20,9 @@
             android:id="@+id/nav_voucer"
             android:icon="@drawable/redeem_50px"
             android:title="@string/menu_voucers" />
-       <!-- <item
+        <item
             android:id="@+id/nav_member"
             android:icon="@drawable/member_50px"
-            android:title="@string/menu_member" />-->
+            android:title="@string/menu_member" />
     </group>
 </menu>

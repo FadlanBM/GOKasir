@@ -50,6 +50,9 @@ class MenuAdminActivity : AppCompatActivity() {
         if (status=="admin"){
             navController.navigate(R.id.nav_admin)
         }
+        if (status=="member"){
+            navController.navigate(R.id.nav_member)
+        }
 
         appBarConfiguration = AppBarConfiguration(
             setOf(

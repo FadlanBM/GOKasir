@@ -52,8 +52,4 @@
                 app:cornerRadius="@dimen/_5sdp" />
         </LinearLayout>
     </LinearLayout>
-
-
-
-
 </androidx.cardview.widget.CardView>

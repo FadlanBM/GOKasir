@@ -54,7 +54,7 @@ func AddMember(c *fiber.Ctx) error {
 		return c.Status(400).JSON(fiber.Map{"Status": "error", "Message": err.Error()})
 	}
 
-	return c.Status(200).JSON(fiber.Map{"Status": "error", "Message": "Member Valid", "Data": member})
+	return c.Status(200).JSON(fiber.Map{"Status": "success", "Message": "Member Valid", "Data": member})
 }
 
 func ValidateMember(idmemeber string) (data *models.Member, err error) {

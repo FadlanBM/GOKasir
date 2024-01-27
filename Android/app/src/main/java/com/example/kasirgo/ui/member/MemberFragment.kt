@@ -1,20 +1,32 @@
 package com.example.kasirgo.ui.member
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.RecyclerView
+import com.example.kasirgo.AdapterRV.AdapterListKaryawan
+import com.example.kasirgo.AdapterRV.AdapterListMember
+import com.example.kasirgo.Util.BaseAPI
+import com.example.kasirgo.Util.SharePref.Companion.getAuth
 import com.example.kasirgo.databinding.FragmentMemberBinding
+import com.example.kasirgo.item.itemKaryawan
+import com.example.kasirgo.item.itemMember
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.json.JSONObject
+import java.net.HttpURLConnection
+import java.net.URL
 
 class MemberFragment : Fragment() {
 
     private var _binding: FragmentMemberBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+    private lateinit var recyclerView: RecyclerView
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -22,16 +34,16 @@ class MemberFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val vouchersViewModel =
-            ViewModelProvider(this).get(MemberViewModel::class.java)
 
         _binding = FragmentMemberBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-        val textView: TextView = binding.textMember
-        vouchersViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+        recyclerView=binding.rvLisMember
+        binding.btnAdd.setOnClickListener {
+            startActivity(Intent(requireContext(),CreateMemberActivity::class.java))
         }
+
+        _GetMember()
+
         return root
     }
 
@@ -39,4 +51,49 @@ class MemberFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    private fun _GetMember() {
+        lifecycleScope.launch() {
+            withContext(Dispatchers.IO) {
+                val datakarlist= mutableListOf<itemMember>()
+                val conn =
+                    URL("${BaseAPI.BaseAPI}/api/members").openConnection() as HttpURLConnection
+                conn.requestMethod = "GET"
+
+                requireContext().getAuth()?.let {
+                    conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
+                }
+                conn.setRequestProperty("Content-Type", "application/json")
+                val code = conn.responseCode
+                Log.e("data", code.toString())
+
+                val body = if (code in 200 until 300) {
+                    conn.inputStream?.bufferedReader()?.use { it.readLine() }
+                } else {
+                    conn.errorStream?.bufferedReader()?.use { it.readLine() }
+                }
+
+
+                withContext(Dispatchers.Main) {
+                    val jsonKaryawan = JSONObject(body!!)
+                    Log.e("json",jsonKaryawan.toString())
+                    val dataKaryawan=jsonKaryawan.getJSONArray("Data")
+                    for(i in 0 until dataKaryawan.length()){
+                        val jsonObject=dataKaryawan.getJSONObject(i)
+                        val id=jsonObject.getString("ID")
+                        val nama=jsonObject.getString("name")
+                        val code_member=jsonObject.getString("code_member")
+                        val alamat=jsonObject.getString("address")
+                        val phone=jsonObject.getString("phone")
+                        val point=jsonObject.getString("point")
+                        datakarlist.add(itemMember(id,nama,alamat,phone,code_member,point))
+                    }
+                    val adapter= AdapterListMember(datakarlist!!,requireContext(),lifecycleScope)
+                    recyclerView.adapter=adapter
+                }
+            }
+        }
+    }
+
+
 }

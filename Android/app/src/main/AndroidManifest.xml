@@ -23,6 +23,15 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ui.Transaksi.PembayaranActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.member.UpdateMemberActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.member.CreateMemberActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.setting.ResetPasswordActivity"
             android:exported="false" />
         <activity
@@ -35,7 +44,7 @@
             android:name=".ui.setting.MainSettingActivity"
             android:exported="false" />
         <activity
-            android:name=".TransaksiActivity"
+            android:name=".ui.Transaksi.TransaksiActivity"
             android:exported="false" />
         <activity
             android:name=".ui.admin.CreateAdminActivity"

@@ -25,6 +25,7 @@ import com.example.kasirgo.Util.CartSharePreft
 import com.example.kasirgo.Util.SharePref.Companion.getAuth
 import com.example.kasirgo.Util.SwipeToDeleteCallback
 import com.example.kasirgo.item.itemCart
+import com.example.kasirgo.ui.Transaksi.TransaksiActivity
 import com.example.kasirgo.ui.barang.ScanBCBarangActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -46,8 +47,9 @@ class KasirFragment : Fragment() {
             intent.putExtra("status", "addCart")
             startActivity(intent)
         }
-
         val addTransaksi:Button=view.findViewById(R.id.btn_Transaksi)
+
+
         val ids=CartSharePreft(requireContext()).getId()
         if (ids.isEmpty()){
             addTransaksi.isVisible=false
@@ -73,6 +75,10 @@ class KasirFragment : Fragment() {
         itemTouchHelper.attachToRecyclerView(recyclerView)
 
         getData(view)
+
+        addTransaksi.setOnClickListener {
+            startActivity(Intent(requireContext(),TransaksiActivity::class.java))
+        }
 
         return view
     }
