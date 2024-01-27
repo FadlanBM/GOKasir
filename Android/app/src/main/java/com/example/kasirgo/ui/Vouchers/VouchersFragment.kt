@@ -33,6 +33,9 @@ import java.io.OutputStreamWriter
 import java.lang.RuntimeException
 import java.net.HttpURLConnection
 import java.net.URL
+import java.text.NumberFormat
+import java.util.Currency
+import java.util.Locale
 
 class VouchersFragment : Fragment() {
 
@@ -91,7 +94,7 @@ class VouchersFragment : Fragment() {
                                val jsonObject=dataVoucer.getJSONObject(i)
                                val id=jsonObject.getString("ID")
                                val codeVoucer=jsonObject.getString("code")
-                               val discount=jsonObject.getString("discount")
+                               val discount=formatIDR(jsonObject.getString("discount").toDouble())
                                val status=jsonObject.getString("is_active")
                                if (status=="false"){
                                    statusVoucer="Tidak Aktif"
@@ -110,6 +113,20 @@ class VouchersFragment : Fragment() {
             }
         }
     }
+
+    private fun formatIDR(nominal:Double):String{
+
+        val localeID = Locale("id", "ID")
+
+        val formatRupiah = NumberFormat.getCurrencyInstance(localeID)
+
+        formatRupiah.currency = Currency.getInstance("IDR")
+
+        val hasilFormat = formatRupiah.format(nominal)
+
+        return hasilFormat
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
