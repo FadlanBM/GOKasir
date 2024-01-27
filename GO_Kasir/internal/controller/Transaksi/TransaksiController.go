@@ -6,8 +6,10 @@ import (
 	"github.com/ProjectLSP/internal/helper"
 	"github.com/ProjectLSP/internal/models"
 	"github.com/ProjectLSP/internal/request"
+	"github.com/ProjectLSP/internal/response"
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
+	"strconv"
 )
 
 // Index godoc
@@ -79,6 +81,42 @@ func ValidateVoucer(CodeVoucer string) (data *models.Voucer, err error) {
 	}
 
 	return voucher, nil
+}
+
+// ValidasiVoucer godoc
+// @Tags Crud Transaksi
+// @Accept json
+// @Produce json
+// @Param code path string true "Voucer Code"
+// @Success 200 {object} response.ResponseDataSuccess
+// @Failure 400 {object} response.ResponseError
+// @Router /api/transaksi/voucher/{code} [get]
+func ValidasiVoucer(c *fiber.Ctx) error {
+	code := c.Params("code")
+
+	var res []response.VoucerResponse
+
+	var voucer []models.Voucer
+	if err := config.DB.First(&voucer, "code= ?", code).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return c.Status(404).JSON(fiber.Map{"Status": "error", "Message": "Discount Tidak di Temukan"})
+		}
+		return c.Status(500).JSON(fiber.Map{"Status": "error", "Message": err.Error()})
+	}
+
+	for _, v := range voucer {
+		voucerResponse := response.VoucerResponse{
+			ID:        v.ID,
+			Code:      v.Code,
+			Discount:  strconv.FormatFloat(v.Discount, 'f', 0, 64),
+			StartDate: v.StartDate.Format("02/01/2006"),
+			EndDate:   v.EndDate.Format("02/01/2006"),
+			IsActive:  v.IsActive,
+		}
+		res = append(res, voucerResponse)
+	}
+
+	return c.Status(200).JSON(fiber.Map{"Status": "Validasi", "Message": "Voucher Exist", "Data": res})
 }
 
 // Calculate godoc

@@ -11,6 +11,7 @@ func TransaksiRoute(c fiber.Router) {
 	app.Use(middleware.APIKeyAuthMiddleware)
 	app.Get("/", Transaksi.Index)
 	app.Post("/addmember", Transaksi.AddMember)
+	app.Get("/voucher/:code", Transaksi.ValidasiVoucer)
 	app.Post("/calculate", Transaksi.Calculate)
 	app.Post("/", Transaksi.Create)
 }

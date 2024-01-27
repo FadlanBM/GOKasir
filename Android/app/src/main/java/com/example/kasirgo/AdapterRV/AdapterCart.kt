@@ -20,6 +20,9 @@ import com.example.kasirgo.Util.SwipeToDeleteCallback
 import com.example.kasirgo.item.itemBarang
 import com.example.kasirgo.item.itemCart
 import kotlinx.coroutines.CoroutineScope
+import java.text.NumberFormat
+import java.util.Currency
+import java.util.Locale
 
 class AdapterCart(val item:List<itemCart>, val context: Context, private val coroutineScope: CoroutineScope,val lifecycleOwner: LifecycleOwner,val view: View): RecyclerView.Adapter<AdapterCart.ViewHolder>() {
 
@@ -47,7 +50,7 @@ class AdapterCart(val item:List<itemCart>, val context: Context, private val cor
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val items=item[position]
         holder.namaBarang.text=items._NamaBarang
-        holder.priceBarang.text="IDR "+items._Price
+        holder.priceBarang.text=formatIDR(items._Price.toDouble())
         holder.codeBarang.text=items._CodeBarang
         result.value=items._Count.toInt()
         val priceSave=items.Default_Price
@@ -59,11 +62,10 @@ class AdapterCart(val item:List<itemCart>, val context: Context, private val cor
 
         readresuld.observe(lifecycleOwner){
             items._Price=(priceSave.toInt()*it).toString()
-            Log.e("priceAwal",items._Price)
         }
-            CartSharePreft(context).updatePrice(position,items._Price)
+        CartSharePreft(context).updatePrice(position,items._Price)
         holder.jumCart.text=items._Count
-        holder.priceBarang.text="IDR "+items._Price
+        holder.priceBarang.text=formatIDR(items._Price.toDouble())
 
         holder.btnPlus.setOnClickListener {
             addCount(position)
@@ -74,7 +76,7 @@ class AdapterCart(val item:List<itemCart>, val context: Context, private val cor
             Log.e("item",priceSave)
 
             CartSharePreft(context).updatePrice(position,items._Price)
-            holder.priceBarang.text="IDR "+items._Price
+            holder.priceBarang.text=formatIDR(items._Price.toDouble())
             holder.jumCart.text=items._Count
 
             val pricee=CartSharePreft(context).getPrice()
@@ -85,7 +87,7 @@ class AdapterCart(val item:List<itemCart>, val context: Context, private val cor
             val addTransaksi:Button=view.findViewById(R.id.btn_Transaksi)
             Log.e("price",pricee.toString())
             if (items._Count!="0"){
-            addTransaksi.text="IDR "+totalPrice.toString()
+            addTransaksi.text=formatIDR(totalPrice.toDouble())
             }
             addTransaksi.isEnabled = items._Count != "0"
         }
@@ -100,7 +102,7 @@ class AdapterCart(val item:List<itemCart>, val context: Context, private val cor
 
             CartSharePreft(context).updatePrice(position,items._Price)
 
-            holder.priceBarang.text="IDR "+items._Price
+            holder.priceBarang.text=formatIDR(items._Price.toDouble())
             holder.jumCart.text=items._Count
 
             val pricee=CartSharePreft(context).getPrice()
@@ -111,19 +113,18 @@ class AdapterCart(val item:List<itemCart>, val context: Context, private val cor
             val addTransaksi:Button=view.findViewById(R.id.btn_Transaksi)
             Log.e("price",pricee.toString())
             if (items._Count!="0"){
-                addTransaksi.text="IDR "+totalPrice.toString()
+                addTransaksi.text=formatIDR(totalPrice.toDouble())
             }
             addTransaksi.isEnabled = items._Count != "0"
         }
         val pricee=CartSharePreft(context).getPrice()
 
         val addTransaksi:Button=view.findViewById(R.id.btn_Transaksi)
-        Log.e("price",pricee.toString())
         var totalPrice=0
         for (price in pricee){
             totalPrice+=price.toInt()
         }
-        addTransaksi.text="IDR "+totalPrice.toString()
+        addTransaksi.text=formatIDR(totalPrice.toDouble())
         addTransaksi.isEnabled = items._Count != "0"
 
         val ids=CartSharePreft(context).getId()
@@ -139,5 +140,18 @@ class AdapterCart(val item:List<itemCart>, val context: Context, private val cor
     fun  minusCount(potition: Int){
         val oldValue=CartSharePreft(context).getCount()[potition].toInt()
         result.value=(oldValue)?.minus(1)
+    }
+
+    private fun formatIDR(nominal:Double):String{
+
+        val localeID = Locale("id", "ID")
+
+        val formatRupiah = NumberFormat.getCurrencyInstance(localeID)
+
+        formatRupiah.currency = Currency.getInstance("IDR")
+
+        val hasilFormat = formatRupiah.format(nominal)
+
+        return hasilFormat
     }
 }

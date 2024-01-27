@@ -136,8 +136,6 @@ definitions:
     properties:
       code:
         type: string
-      name:
-        type: string
       password:
         type: string
     type: object
@@ -1066,6 +1064,29 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.RequestBiayaTransaksi'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Transaksi
+  /api/transaksi/voucher/{code}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Voucer Code
+        in: path
+        name: code
+        required: true
+        type: string
       produces:
       - application/json
       responses:

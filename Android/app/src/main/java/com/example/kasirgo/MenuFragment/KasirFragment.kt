@@ -33,6 +33,9 @@ import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
+import java.text.NumberFormat
+import java.util.Currency
+import java.util.Locale
 
 class KasirFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView

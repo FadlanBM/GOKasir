@@ -1414,6 +1414,42 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/transaksi/voucher/{code}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Crud Transaksi"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Voucer Code",
+                        "name": "code",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
         "/api/voucer": {
             "get": {
                 "consumes": [
@@ -1801,9 +1837,6 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "code": {
-                    "type": "string"
-                },
-                "name": {
                     "type": "string"
                 },
                 "password": {

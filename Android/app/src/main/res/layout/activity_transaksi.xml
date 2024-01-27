@@ -5,9 +5,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.Transaksi.TransaksiActivity">
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ll_pembayaran_1"
+        android:elevation="@dimen/_10sdp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10sdp"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:id="@+id/btnRowBack"
+                android:src="@drawable/baseline_keyboard_arrow_left_24" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pembayaran"
+                android:alpha="0.6"
+                android:fontFamily="@font/poppinsbold"
+                android:layout_gravity="center"
+                android:textSize="16sp"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/ll_pembayaran_1"
         >
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,9 +64,10 @@
                             android:fontFamily="@font/poppinsregular"
                             android:textSize="@dimen/_10ssp"/>
                         <TextView
+                            android:id="@+id/tvNameMemberTransaksi"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Fadlan Buwono Mukti"
+                            android:text="-"
                             android:textSize="@dimen/_10ssp"
                             android:fontFamily="@font/poppinssemibold"/>
                         <TextView
@@ -83,9 +114,10 @@
                             android:fontFamily="@font/poppinsregular"
                             android:textSize="@dimen/_10ssp"/>
                         <TextView
+                            android:id="@+id/tvCodeVoucherTransaksi"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Fadlan Buwono Mukti"
+                            android:text="-"
                             android:textSize="@dimen/_10ssp"
                             android:fontFamily="@font/poppinssemibold"/>
 
@@ -95,6 +127,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginEnd="@dimen/_20sdp"
                         android:gravity="end"
+                        android:id="@+id/btnAddVoucer"
                         >
                         <ImageView
                             android:layout_width="wrap_content"
@@ -144,7 +177,8 @@
                             android:layout_height="wrap_content"
                             android:text="(3 barang)"
                             android:layout_marginStart="@dimen/_3sdp"
-                            android:fontFamily="@font/poppinsregular"/>
+                            android:fontFamily="@font/poppinsregular"
+                            android:id="@+id/tvCountCart"/>
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -152,7 +186,8 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Rp.100.000"
+                                android:id="@+id/tvCartPrice"
+                                android:text="-"
                                 android:layout_marginStart="@dimen/_3sdp"
                                 android:fontFamily="@font/poppinsregular"/>
                         </LinearLayout>
@@ -172,9 +207,10 @@
                             android:layout_height="wrap_content"
                             android:gravity="end">
                             <TextView
+                                android:id="@+id/tvTotalDiskomTransaksi"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="- Rp.100.000"
+                                android:text="-"
                                 android:layout_marginStart="@dimen/_3sdp"
                                 android:fontFamily="@font/poppinsregular"/>
                         </LinearLayout>
@@ -196,7 +232,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="- Rp.100.000"
+                                android:text="-"
                                 android:layout_marginStart="@dimen/_3sdp"
                                 android:fontFamily="@font/poppinsregular"/>
                         </LinearLayout>
@@ -218,7 +254,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Rp.100.000"
+                                android:text="-"
                                 android:layout_marginStart="@dimen/_3sdp"
                                 android:fontFamily="@font/poppinsregular"/>
                         </LinearLayout>
@@ -250,7 +286,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Rp.100.000"
+                                android:text="-"
                                 android:layout_marginStart="@dimen/_3sdp"
                                 android:fontFamily="@font/poppinsregular"/>
                         </LinearLayout>

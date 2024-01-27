@@ -26,6 +26,9 @@ import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
+import java.text.NumberFormat
+import java.util.Currency
+import java.util.Locale
 
 class BarangFragment : Fragment() {
 
@@ -102,7 +105,7 @@ class BarangFragment : Fragment() {
                         val id=jsonObject.getString("ID")
                         val nama=jsonObject.getString("name")
                         val codebarang=jsonObject.getString("code_barang")
-                        val price=jsonObject.getString("price")
+                        val price=formatIDR(jsonObject.getString("price").toDouble())
                         databaranglist.add(itemBarang(id,nama,price,codebarang))
                     }
                     val adapter= AdapterListBarang(databaranglist!!,requireContext(),lifecycleScope)
@@ -114,4 +117,18 @@ class BarangFragment : Fragment() {
             }
         }
     }
+
+    private fun formatIDR(nominal:Double):String{
+
+        val localeID = Locale("id", "ID")
+
+        val formatRupiah = NumberFormat.getCurrencyInstance(localeID)
+
+        formatRupiah.currency = Currency.getInstance("IDR")
+
+        val hasilFormat = formatRupiah.format(nominal)
+
+        return hasilFormat
+    }
+
 }
