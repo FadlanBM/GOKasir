@@ -24,6 +24,7 @@ import com.example.kasirgo.R
 import com.example.kasirgo.Util.BaseAPI
 import com.example.kasirgo.Util.CartSharePreft
 import com.example.kasirgo.Util.SharePref.Companion.getAuth
+import com.example.kasirgo.Util.SharePreftTransaksi
 import com.example.kasirgo.databinding.ActivityTransaksiBinding
 import com.example.kasirgo.item.itemCart
 import com.example.kasirgo.item.itemMember
@@ -51,6 +52,10 @@ class TransaksiActivity : AppCompatActivity() {
     private val readMember: LiveData<Int> get() = memberTotal
     private var TotalOb= MutableLiveData<Int>()
     private val readTotal: LiveData<Int> get() = TotalOb
+    private var idMembermut= MutableLiveData<Int>()
+    private val readidMember: LiveData<Int> get() = idMembermut
+    private var pointOb= MutableLiveData<Int>()
+    private val readPoint: LiveData<Int> get() = pointOb
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTransaksiBinding.inflate(layoutInflater)
@@ -107,6 +112,20 @@ class TransaksiActivity : AppCompatActivity() {
 
         binding.btnAddMember.setOnClickListener {
             showModalAuthMember()
+        }
+
+        binding.btnAddTransaksi.setOnClickListener {
+            readidMember.observe(this){
+                SharePreftTransaksi().member_id=it
+            }
+            readPoint.observe(this){
+                SharePreftTransaksi().point=it
+            }
+            SharePreftTransaksi().ppn=ppn
+            readTotal.observe(this){
+            SharePreftTransaksi().totalPrice=it
+            }
+            startActivity(Intent(this,PembayaranActivity::class.java))
         }
 
     }
@@ -233,7 +252,7 @@ class TransaksiActivity : AppCompatActivity() {
             binding.tvTotalPointMemberTran.text="- ${formatIDR(point.toDouble())}"
             binding.tvNameMemberTransaksi.text=nama
             binding.tvCodeMemberTransaksi.text=code
-            memberTotal.value=point.toInt()
+            pointOb.value=point.toInt()
             dialog.dismiss()
         }
         cancel.setOnClickListener {
@@ -274,6 +293,7 @@ class TransaksiActivity : AppCompatActivity() {
                                 val endDiskon=voucherData.getString("end_date")
                                 val active=voucherData.getString("is_active")
                                 showModalAddVoucher(codeVoucher,totalDiskon,endDiskon,active)
+                                SharePreftTransaksi().codeVoucer=codeVoucher
                             }
                             dialog.dismiss()
                         }
@@ -320,11 +340,13 @@ class TransaksiActivity : AppCompatActivity() {
                     val jsonMember = JSONObject(body!!)
                     if (code in 200 until 300){
                         val member=jsonMember.getJSONObject("Data")
+                        val idMember=member.getString("ID")
                         val code=member.getString("code_member")
                         val nama_member=member.getString("name")
                         val alamat=member.getString("address")
                         val point=member.getString("point")
                         showModalAddMember(code,nama_member,alamat,point)
+                        idMembermut.value=idMember.toInt()
                     }
                     dialog.dismiss()
                 }
@@ -391,47 +413,4 @@ class TransaksiActivity : AppCompatActivity() {
             }
         }
     }
-
-    private fun _GetMember() {
-        lifecycleScope.launch() {
-            withContext(Dispatchers.IO) {
-                val datakarlist= mutableListOf<itemMember>()
-                val conn =
-                    URL("${BaseAPI.BaseAPI}/api/members").openConnection() as HttpURLConnection
-                conn.requestMethod = "GET"
-
-                getAuth()?.let {
-                    conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                }
-                conn.setRequestProperty("Content-Type", "application/json")
-                val code = conn.responseCode
-                Log.e("data", code.toString())
-
-                val body = if (code in 200 until 300) {
-                    conn.inputStream?.bufferedReader()?.use { it.readLine() }
-                } else {
-                    conn.errorStream?.bufferedReader()?.use { it.readLine() }
-                }
-
-
-                withContext(Dispatchers.Main) {
-                    val jsonKaryawan = JSONObject(body!!)
-                    Log.e("json",jsonKaryawan.toString())
-                    val dataKaryawan=jsonKaryawan.getJSONArray("Data")
-                    for(i in 0 until dataKaryawan.length()){
-                        val jsonObject=dataKaryawan.getJSONObject(i)
-                        val id=jsonObject.getString("ID")
-                        val nama=jsonObject.getString("name")
-                        val code_member=jsonObject.getString("code_member")
-                        val alamat=jsonObject.getString("address")
-                        val phone=jsonObject.getString("phone")
-                        val point=jsonObject.getString("point")
-                        datakarlist.add(itemMember(id,nama,alamat,phone,code_member,point))
-                    }
-                }
-            }
-        }
-    }
-
-
 }

@@ -303,6 +303,7 @@
                             android:background="@color/black"
                             android:alpha="0.2"/>
                     <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnAddTransaksi"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_50sdp"
                         app:cornerRadius="@dimen/_5sdp"

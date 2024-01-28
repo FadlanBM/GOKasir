@@ -355,42 +355,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/barang/WithQr/{code}": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Crud Barang"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Barang Code",
-                        "name": "code",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.ResponseDataSuccess"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/response.ResponseError"
-                        }
-                    }
-                }
-            }
-        },
         "/api/barang/{id}": {
             "get": {
                 "consumes": [
@@ -1338,6 +1302,42 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/transaksi/WithQr/{code}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Crud Transaksi"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Barang Code",
+                        "name": "code",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
         "/api/transaksi/addmember": {
             "post": {
                 "consumes": [
@@ -1376,7 +1376,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/transaksi/calculate": {
+        "/api/transaksi/calculatePoint/{id}": {
             "post": {
                 "consumes": [
                     "application/json"
@@ -1388,6 +1388,13 @@ const docTemplate = `{
                     "Crud Transaksi"
                 ],
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Member Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
                     {
                         "description": "Request",
                         "name": "request",
@@ -1736,12 +1743,6 @@ const docTemplate = `{
         "request.RequestBiayaTransaksi": {
             "type": "object",
             "properties": {
-                "code_voucer": {
-                    "type": "string"
-                },
-                "id_Member": {
-                    "type": "string"
-                },
                 "total_price": {
                     "type": "number"
                 }

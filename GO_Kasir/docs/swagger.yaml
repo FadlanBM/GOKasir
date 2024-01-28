@@ -69,10 +69,6 @@ definitions:
     type: object
   request.RequestBiayaTransaksi:
     properties:
-      code_voucer:
-        type: string
-      id_Member:
-        type: string
       total_price:
         type: number
     type: object
@@ -453,29 +449,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.BarangRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.ResponseDataSuccess'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.ResponseError'
-      tags:
-      - Crud Barang
-  /api/barang/WithQr/{code}:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: Barang Code
-        in: path
-        name: code
-        required: true
-        type: string
       produces:
       - application/json
       responses:
@@ -1025,6 +998,29 @@ paths:
             $ref: '#/definitions/response.ResponseError'
       tags:
       - Crud Transaksi
+  /api/transaksi/WithQr/{code}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Barang Code
+        in: path
+        name: code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ResponseDataSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ResponseError'
+      tags:
+      - Crud Transaksi
   /api/transaksi/addmember:
     post:
       consumes:
@@ -1049,11 +1045,16 @@ paths:
             $ref: '#/definitions/response.ResponseError'
       tags:
       - Crud Transaksi
-  /api/transaksi/calculate:
+  /api/transaksi/calculatePoint/{id}:
     post:
       consumes:
       - application/json
       parameters:
+      - description: Member Id
+        in: path
+        name: id
+        required: true
+        type: string
       - description: Request
         in: body
         name: request

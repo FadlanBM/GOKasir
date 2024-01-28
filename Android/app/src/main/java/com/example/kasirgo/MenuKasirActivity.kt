@@ -46,6 +46,10 @@ class MenuKasirActivity : AppCompatActivity() {
             val tab= tabLayout.getTabAt(0)
             tabLayout.selectTab(tab)
         }
+        if (intent.getStringExtra("status")=="history"){
+            val tab= tabLayout.getTabAt(1)
+            tabLayout.selectTab(tab)
+        }
 
     }
 

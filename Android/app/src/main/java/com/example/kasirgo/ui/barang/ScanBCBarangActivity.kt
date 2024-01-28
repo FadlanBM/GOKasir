@@ -128,7 +128,7 @@ class ScanBCBarangActivity : AppCompatActivity() {
                     val ids=CartSharePreft(this@ScanBCBarangActivity).getId()
                     Log.e("idCart",ids.toString())
                         val conn =
-                            URL("${BaseAPI.BaseAPI}/api/barang/WithQr/${id}").openConnection() as HttpURLConnection
+                            URL("${BaseAPI.BaseAPI}/api/transaksi/WithQr/${id}").openConnection() as HttpURLConnection
                         conn.requestMethod = "GET"
 
                         getAuth()?.let {

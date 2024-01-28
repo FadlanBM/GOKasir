@@ -100,7 +100,7 @@ func AddMember(c *fiber.Ctx) error {
 	return c.Status(200).JSON(fiber.Map{"Status": "success", "Message": "Member Valid", "Data": member})
 }
 
-func ValidateMember(idmemeber string) (data *models.Member, err error) {
+func ValidateMember(idmemeber int) (data *models.Member, err error) {
 	member := new(models.Member)
 
 	if err := config.DB.First(&member, idmemeber).Error; err != nil {
@@ -171,6 +171,9 @@ func ValidasiVoucer(c *fiber.Ctx) error {
 // @Router /api/transaksi/calculatePoint/{id} [post]
 func CalculatePoint(c *fiber.Ctx) error {
 	req := new(request.RequestBiayaTransaksi)
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"Status": "Error", "Message": err.Error()})
+	}
 
 	idParam := c.Params("id")
 
@@ -187,15 +190,12 @@ func CalculatePoint(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"Status": "Error", "Message": err.Error()})
 	}
 
-	jumlahPPN := req.TotalPrice * 0.10
+	jumlahPPN := req.TotalPrice * 10
 
 	total := req.TotalPrice + jumlahPPN
-	
-	var poinBaru uint
-	rasioPoin := 1000
-	poinBaru = uint(total) / uint(rasioPoin)
 
-	existingMember.Point = poinBaru
+	rasioPoin := 1000
+	poinBaru := uint(total) / uint(rasioPoin)
 
 	existingMember.Point = poinBaru
 
@@ -230,8 +230,17 @@ func Create(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"Status": "Error", "Message": err.Error()})
 	}
 
-	dataVoucher, _ := ValidateVoucer(req.CodeVoucer)
-	dataMember, _ := ValidateMember(req.MemberID)
+	// Validasi Voucher
+	var dataVoucher *models.Voucer
+	if req.CodeVoucer != "" {
+		dataVoucher, _ = ValidateVoucer(req.CodeVoucer)
+	}
+
+	// Validasi Member
+	var dataMember *models.Member
+	if req.MemberID != 0 {
+		dataMember, _ = ValidateMember(req.MemberID)
+	}
 
 	transaksi := models.Transaksi{
 		TotalPrice:   req.TotalPrice,
@@ -239,9 +248,16 @@ func Create(c *fiber.Ctx) error {
 		PPN:          req.Ppn,
 		Kembalian:    req.Kembalian,
 		Point:        req.Point,
-		VoucerID:     dataVoucher.ID,
-		KaryawanID:   existingKaryawan.ID,
-		MemberID:     dataMember.ID,
+	}
+
+	if dataVoucher != nil {
+		transaksi.VoucerID = dataVoucher.ID
+	}
+
+	transaksi.KaryawanID = existingKaryawan.ID
+
+	if dataMember != nil {
+		transaksi.MemberID = dataMember.ID
 	}
 
 	if err := config.DB.Create(&transaksi).Error; err != nil {

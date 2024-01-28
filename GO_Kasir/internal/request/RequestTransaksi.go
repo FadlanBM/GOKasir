@@ -15,5 +15,5 @@ type RequestTransaksi struct {
 	KaryawanID        float64 `json:"karyawan_id"`
 	CodeVoucer        string  `json:"code_voucer"`
 	Point             uint    `json:"point"`
-	MemberID          string  `json:"member_id"`
+	MemberID          int     `json:"member_id"`
 }

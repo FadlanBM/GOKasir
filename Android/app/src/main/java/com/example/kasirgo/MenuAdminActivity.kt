@@ -16,6 +16,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import com.example.kasirgo.Util.SharePreftLogin
 import com.example.kasirgo.databinding.ActivityMenuAdminBinding
 import com.example.kasirgo.ui.setting.MainSettingActivity
 
@@ -71,6 +72,7 @@ class MenuAdminActivity : AppCompatActivity() {
     override fun onBackPressed() {
 
         if (doubleBackToExitPressedOnce) {
+            SharePreftLogin.id_user=""
             startActivity(Intent(this,LoginActivity::class.java))
             return
         }
@@ -91,6 +93,7 @@ class MenuAdminActivity : AppCompatActivity() {
                 .setTitle("Warning")
                 .setMessage("Apakah anda ingin logout")
                 .setPositiveButton("Yes") { _, _ ->
+                    SharePreftLogin.id_user=""
                     startActivity(Intent(this,LoginActivity::class.java))
                 }
                 .setNegativeButton("No"){_,_->
