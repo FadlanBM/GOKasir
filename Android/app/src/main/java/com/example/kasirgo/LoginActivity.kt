@@ -8,8 +8,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import com.example.kasirgo.Util.BaseAPI
-import com.example.kasirgo.Util.SharePref.Companion.getAuth
-import com.example.kasirgo.Util.SharePref.Companion.setAuth
+import com.example.kasirgo.Util.SharePref
+
 import com.example.kasirgo.Util.SharePreftLogin
 import com.example.kasirgo.databinding.ActivityLoginBinding
 import com.example.kasirgo.library.ExceptionMessage
@@ -22,6 +22,7 @@ import java.io.OutputStreamWriter
 import java.lang.RuntimeException
 import java.net.HttpURLConnection
 import java.net.URL
+import kotlin.system.exitProcess
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -38,16 +39,13 @@ class LoginActivity : AppCompatActivity() {
 
         binding.btnLogin.setOnClickListener {
             login()
-            _GetMe()
         }
 
     }
-
     override fun onBackPressed() {
-        System.exit(0)
+        super.onBackPressed()
+        exitProcess(0)
     }
-
-
     private fun _GetMe() {
             lifecycleScope.launch() {
         try {
@@ -55,11 +53,9 @@ class LoginActivity : AppCompatActivity() {
                     val conn =
                         URL("${BaseAPI.BaseAPI}/api/me").openConnection() as HttpURLConnection
                     conn.requestMethod = "GET"
-
-                    getAuth()?.let {
-                        conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                    }
+                    conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                     conn.setRequestProperty("Content-Type", "application/json")
+                    Log.e("token",SharePref.token)
                     val code = conn.responseCode
                     Log.e("data", code.toString())
 
@@ -70,6 +66,7 @@ class LoginActivity : AppCompatActivity() {
                     }
                     withContext(Dispatchers.Main) {
                         val jsonKaryawan = JSONObject(body!!)
+                        Log.e("id_user",jsonKaryawan.toString())
                         val id_user=jsonKaryawan.getString("user_id")
                         SharePreftLogin.id_user=id_user
                     }
@@ -144,8 +141,10 @@ class LoginActivity : AppCompatActivity() {
                                 .setMessage("Login success")
                                 .setNeutralButton("Ok") { _, _ -> }
                                 .setOnDismissListener {
-                                    setAuth(json)
                                     val role = json.getString("role")
+                                    val token=json.getString("token")
+                                    _GetMe()
+                                    SharePref.token=token
                                     if (role == "kasir") {
                                         startActivity(
                                             Intent(

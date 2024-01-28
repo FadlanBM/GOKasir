@@ -11,7 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kasirgo.AdapterRV.AdapterListKaryawan
 import com.example.kasirgo.Util.BaseAPI
-import com.example.kasirgo.Util.SharePref.Companion.getAuth
+import com.example.kasirgo.Util.SharePref
 import com.example.kasirgo.databinding.FragmentKaryawanBinding
 import com.example.kasirgo.item.itemKaryawan
 import kotlinx.coroutines.Dispatchers
@@ -39,7 +39,6 @@ class KaryawanFragment : Fragment() {
         binding.btnAdd.setOnClickListener {
             startActivity(Intent(requireContext(),CreateKaryawanActivity::class.java))
         }
-
         return root
     }
 
@@ -47,24 +46,16 @@ class KaryawanFragment : Fragment() {
         lifecycleScope.launch() {
             withContext(Dispatchers.IO) {
                 val datakarlist= mutableListOf<itemKaryawan>()
-                val conn =
-                    URL("${BaseAPI.BaseAPI}/api/karyawan").openConnection() as HttpURLConnection
+                val conn = URL("${BaseAPI.BaseAPI}/api/karyawan").openConnection() as HttpURLConnection
                 conn.requestMethod = "GET"
-
-                requireContext().getAuth()?.let {
-                    conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                }
+                conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                 conn.setRequestProperty("Content-Type", "application/json")
                 val code = conn.responseCode
-                Log.e("data", code.toString())
-
                 val body = if (code in 200 until 300) {
                     conn.inputStream?.bufferedReader()?.use { it.readLine() }
                 } else {
                     conn.errorStream?.bufferedReader()?.use { it.readLine() }
                 }
-
-
                 withContext(Dispatchers.Main) {
                     val jsonKaryawan = JSONObject(body!!)
                     val dataKaryawan=jsonKaryawan.getJSONArray("Data")

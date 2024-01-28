@@ -8,7 +8,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import com.example.kasirgo.MenuAdminActivity
 import com.example.kasirgo.Util.BaseAPI
-import com.example.kasirgo.Util.SharePref.Companion.getAuth
+import com.example.kasirgo.Util.SharePref
 import com.example.kasirgo.databinding.ActivityInsertBarangBinding
 import com.example.kasirgo.library.ExceptionMessage
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -102,10 +102,7 @@ class CreateBarangActivity : AppCompatActivity() {
                 val conn =
                     URL("${BaseAPI.BaseAPI}/api/barang").openConnection() as HttpURLConnection
                 conn.requestMethod = "POST"
-
-                getAuth()?.let {
-                    conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                }
+                    conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                 conn.doOutput = true
                 conn.setRequestProperty("Content-Type", "application/json")
                 OutputStreamWriter(conn.outputStream).use {

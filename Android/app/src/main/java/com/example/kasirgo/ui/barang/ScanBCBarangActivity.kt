@@ -17,24 +17,17 @@ import com.budiyev.android.codescanner.CodeScannerView
 import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
-import com.example.kasirgo.AdapterRV.AdapterCart
 import com.example.kasirgo.MenuKasirActivity
-import com.example.kasirgo.R
 import com.example.kasirgo.Util.BaseAPI
 import com.example.kasirgo.Util.CartSharePreft
 import com.example.kasirgo.Util.SharePref
-import com.example.kasirgo.Util.SharePref.Companion.getAuth
 import com.example.kasirgo.databinding.ActivityScanBcbarangBinding
-import com.example.kasirgo.item.itemCart
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
-import kotlin.system.exitProcess
 
 class ScanBCBarangActivity : AppCompatActivity() {
     private  lateinit var codeScanner:CodeScanner
@@ -131,12 +124,10 @@ class ScanBCBarangActivity : AppCompatActivity() {
                             URL("${BaseAPI.BaseAPI}/api/transaksi/WithQr/${id}").openConnection() as HttpURLConnection
                         conn.requestMethod = "GET"
 
-                        getAuth()?.let {
                             conn.setRequestProperty(
                                 "Authorization",
-                                "Bearer ${it.getString("token")}"
+                                "Bearer ${SharePref.token}"
                             )
-                        }
                         conn.setRequestProperty("Content-Type", "application/json")
                         val code = conn.responseCode
                         Log.e("data", code.toString())

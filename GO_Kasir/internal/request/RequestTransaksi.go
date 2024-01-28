@@ -7,6 +7,13 @@ type RequestPPNTransaksi struct {
 	TotalPrice string `json:"total_price"`
 }
 
+type RequesPembelian struct {
+	TransaksiID   uint    `json:"transaksi_id" form:"transaksi_id"`
+	BarangID      uint    `json:"barang_id" form:"barang_id"`
+	Quantity      uint    `json:"quantity" form:"quantity"`
+	SubTotalHarga float64 `json:"subTotalHarga" form:"subTotalHarga"`
+}
+
 type RequestTransaksi struct {
 	TotalPrice        float64 `json:"total_price"`
 	NominalPembayaran float64 `json:"nominal_pembayaran"`

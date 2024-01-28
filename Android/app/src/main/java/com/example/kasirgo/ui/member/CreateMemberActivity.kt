@@ -7,9 +7,8 @@ import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import com.example.kasirgo.MenuAdminActivity
-import com.example.kasirgo.R
 import com.example.kasirgo.Util.BaseAPI
-import com.example.kasirgo.Util.SharePref.Companion.getAuth
+import com.example.kasirgo.Util.SharePref
 import com.example.kasirgo.databinding.ActivityCreateMemberBinding
 import com.example.kasirgo.library.ExceptionMessage
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -75,13 +74,9 @@ class CreateMemberActivity : AppCompatActivity() {
                 if (ConfirmPassword.text.toString().isBlank()) throw ExceptionMessage.IgnorableException("Form Comfirm Password Petugas masih kosong")
                 if (Password.text.toString()!=ConfirmPassword.text.toString()) throw  ExceptionMessage.IgnorableException("Confirm Password tidak sama")
 
-                val conn =
-                    URL("${BaseAPI.BaseAPI}/api/members").openConnection() as HttpURLConnection
+                val conn = URL("${BaseAPI.BaseAPI}/api/members").openConnection() as HttpURLConnection
                 conn.requestMethod = "POST"
-
-                getAuth()?.let {
-                    conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                }
+                conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                 conn.doOutput = true
                 conn.setRequestProperty("Content-Type", "application/json")
                 OutputStreamWriter(conn.outputStream).use {
@@ -92,10 +87,7 @@ class CreateMemberActivity : AppCompatActivity() {
                         put("phone",NoHp.text.toString() )
                     }.toString())
                 }
-
                 val code = conn.responseCode
-                Log.e("data", code.toString())
-
                 val body = if (code in 200 until 300) {
                     conn.inputStream?.bufferedReader()?.use { it.readLine() }
                 } else {

@@ -9,12 +9,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kasirgo.MenuAdminActivity
 import com.example.kasirgo.R
 import com.example.kasirgo.Util.BaseAPI
-import com.example.kasirgo.Util.SharePref.Companion.getAuth
+import com.example.kasirgo.Util.SharePref
 import com.example.kasirgo.item.itemKaryawan
 import com.example.kasirgo.ui.karyawan.UpdateKaryawanActivity
 import kotlinx.coroutines.CoroutineScope
@@ -69,10 +68,7 @@ class AdapterListKaryawan(val item:List<itemKaryawan>,val context: Context, priv
                     val conn =
                         URL("${BaseAPI.BaseAPI}/api/karyawan/${id}").openConnection() as HttpURLConnection
                     conn.requestMethod = "DELETE"
-
-                    context.getAuth()?.let {
-                        conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                    }
+                    conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                     conn.setRequestProperty("Content-Type", "application/json")
 
                     val code = conn.responseCode

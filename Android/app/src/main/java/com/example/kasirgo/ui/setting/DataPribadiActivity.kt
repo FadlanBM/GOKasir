@@ -7,14 +7,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kasirgo.AdapterRV.AdapterListData
-import com.example.kasirgo.R
 import com.example.kasirgo.Util.BaseAPI
-import com.example.kasirgo.Util.SharePref.Companion.getAuth
+import com.example.kasirgo.Util.SharePref
 import com.example.kasirgo.Util.SharePreftLogin
 import com.example.kasirgo.databinding.ActivityDataPribadiBinding
-import com.example.kasirgo.databinding.ActivityMenuAdminBinding
 import com.example.kasirgo.item.Setting
-import com.example.kasirgo.item.itemKaryawan
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -39,10 +36,7 @@ class DataPribadiActivity : AppCompatActivity() {
                     val conn =
                         URL("${BaseAPI.BaseAPI}/api/admin/${SharePreftLogin.id_user}").openConnection() as HttpURLConnection
                     conn.requestMethod = "GET"
-
-                    getAuth()?.let {
-                        conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                    }
+                    conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                     conn.setRequestProperty("Content-Type", "application/json")
                     val code = conn.responseCode
                     Log.e("data", code.toString())

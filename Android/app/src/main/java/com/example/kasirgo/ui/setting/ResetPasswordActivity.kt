@@ -7,9 +7,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
-import com.example.kasirgo.R
 import com.example.kasirgo.Util.BaseAPI
-import com.example.kasirgo.Util.SharePref.Companion.getAuth
+import com.example.kasirgo.Util.SharePref
 import com.example.kasirgo.Util.SharePreftLogin
 import com.example.kasirgo.databinding.ActivityResetPasswordBinding
 import kotlinx.coroutines.Dispatchers
@@ -47,13 +46,9 @@ class ResetPasswordActivity : AppCompatActivity() {
         Log.e("uid",SharePreftLogin.id_user)
         lifecycleScope.launch() {
             withContext(Dispatchers.IO) {
-                val conn =
-                    URL("${BaseAPI.BaseAPI}/api/admin/resetPass/${SharePreftLogin.id_user}").openConnection() as HttpURLConnection
+                val conn = URL("${BaseAPI.BaseAPI}/api/admin/resetPass/${SharePreftLogin.id_user}").openConnection() as HttpURLConnection
                 conn.requestMethod = "PUT"
-
-                getAuth()?.let {
-                    conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                }
+                conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                 conn.setRequestProperty("Content-Type", "application/json")
                 OutputStreamWriter(conn.outputStream).use {
                     it.write(JSONObject().apply {

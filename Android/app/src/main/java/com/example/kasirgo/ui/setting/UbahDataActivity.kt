@@ -10,18 +10,11 @@ import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.kasirgo.AdapterRV.AdapterListData
-import com.example.kasirgo.MenuAdminActivity
-import com.example.kasirgo.MenuKasirActivity
 import com.example.kasirgo.R
 import com.example.kasirgo.Util.BaseAPI
-import com.example.kasirgo.Util.SharePref.Companion.getAuth
-import com.example.kasirgo.Util.SharePref.Companion.setAuth
+import com.example.kasirgo.Util.SharePref
 import com.example.kasirgo.Util.SharePreftLogin
-import com.example.kasirgo.databinding.ActivityLoginBinding
 import com.example.kasirgo.databinding.ActivityUbahDataBinding
-import com.example.kasirgo.item.Setting
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -65,20 +58,14 @@ class UbahDataActivity : AppCompatActivity() {
                 val conn =
                     URL("${BaseAPI.BaseAPI}/api/tokoprofile").openConnection() as HttpURLConnection
                 conn.requestMethod = "GET"
-
-                getAuth()?.let {
-                    conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                }
+                conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                 conn.setRequestProperty("Content-Type", "application/json")
                 val code = conn.responseCode
-                Log.e("data", code.toString())
-
                 val body = if (code in 200 until 300) {
                     conn.inputStream?.bufferedReader()?.use { it.readLine() }
                 } else {
                     conn.errorStream?.bufferedReader()?.use { it.readLine() }
                 }
-
 
                 withContext(Dispatchers.Main) {
                     val jsontoko = JSONObject(body!!)
@@ -91,7 +78,6 @@ class UbahDataActivity : AppCompatActivity() {
                     }
                     var autoComplite: AutoCompleteTextView =binding.comboBoxListToko
                     var adapter= ArrayAdapter(this@UbahDataActivity,R.layout.list_toko,item)
-
                     autoComplite.setAdapter(adapter)
                     autoComplite.onItemClickListener=
                         AdapterView.OnItemClickListener { adapterView, view, i, l ->
@@ -105,16 +91,11 @@ class UbahDataActivity : AppCompatActivity() {
     private fun _GetTokoByid(id_toko:String) {
         lifecycleScope.launch() {
             withContext(Dispatchers.IO) {
-                val conn =
-                    URL("${BaseAPI.BaseAPI}/api/tokoprofile/$id_toko").openConnection() as HttpURLConnection
+                val conn = URL("${BaseAPI.BaseAPI}/api/tokoprofile/$id_toko").openConnection() as HttpURLConnection
                 conn.requestMethod = "GET"
-
-                getAuth()?.let {
-                    conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                }
+                conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                 conn.setRequestProperty("Content-Type", "application/json")
                 val code = conn.responseCode
-                Log.e("data", code.toString())
 
                 val body = if (code in 200 until 300) {
                     conn.inputStream?.bufferedReader()?.use { it.readLine() }
@@ -138,14 +119,9 @@ class UbahDataActivity : AppCompatActivity() {
                 val conn =
                     URL("${BaseAPI.BaseAPI}/api/admin/${SharePreftLogin.id_user}").openConnection() as HttpURLConnection
                 conn.requestMethod = "GET"
-
-                getAuth()?.let {
-                    conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                }
+                conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                 conn.setRequestProperty("Content-Type", "application/json")
                 val code = conn.responseCode
-                Log.e("data", code.toString())
-
                 val body = if (code in 200 until 300) {
                     conn.inputStream?.bufferedReader()?.use { it.readLine() }
                 } else {
@@ -173,13 +149,9 @@ class UbahDataActivity : AppCompatActivity() {
     private fun _UpdateUser() {
         lifecycleScope.launch() {
             withContext(Dispatchers.IO) {
-                val conn =
-                    URL("${BaseAPI.BaseAPI}/api/admin/${SharePreftLogin.id_user}").openConnection() as HttpURLConnection
+                val conn = URL("${BaseAPI.BaseAPI}/api/admin/${SharePreftLogin.id_user}").openConnection() as HttpURLConnection
                 conn.requestMethod = "PUT"
-
-                getAuth()?.let {
-                    conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                }
+                conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                 conn.setRequestProperty("Content-Type", "application/json")
                 OutputStreamWriter(conn.outputStream).use {
                     it.write(JSONObject().apply {

@@ -3,20 +3,16 @@ package com.example.kasirgo.ui.karyawan
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.Log
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import com.example.kasirgo.MenuAdminActivity
-import com.example.kasirgo.MenuKasirActivity
 import com.example.kasirgo.R
 import com.example.kasirgo.Util.BaseAPI
-import com.example.kasirgo.Util.SharePref.Companion.getAuth
-import com.example.kasirgo.Util.SharePref.Companion.setAuth
+import com.example.kasirgo.Util.SharePref
 import com.example.kasirgo.databinding.ActivityCreateKaryawanBinding
 import com.example.kasirgo.library.ExceptionMessage
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -55,21 +51,15 @@ class CreateKaryawanActivity : AppCompatActivity() {
                 val conn =
                     URL("${BaseAPI.BaseAPI}/api/tokoprofile").openConnection() as HttpURLConnection
                 conn.requestMethod = "GET"
-
-                getAuth()?.let {
-                    conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                }
+                conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                 conn.setRequestProperty("Content-Type", "application/json")
                 val code = conn.responseCode
                 Log.e("data", code.toString())
-
                 val body = if (code in 200 until 300) {
                     conn.inputStream?.bufferedReader()?.use { it.readLine() }
                 } else {
                     conn.errorStream?.bufferedReader()?.use { it.readLine() }
                 }
-
-
                 withContext(Dispatchers.Main) {
                     val jsontoko = JSONObject(body!!)
                     val jsonArray=jsontoko.getJSONArray("data")
@@ -141,11 +131,7 @@ class CreateKaryawanActivity : AppCompatActivity() {
                 val conn =
                     URL("${BaseAPI.BaseAPI}/api/karyawan").openConnection() as HttpURLConnection
                 conn.requestMethod = "POST"
-
-                getAuth()?.let {
-                    conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                    tokoID=it.getInt("toko_id")
-                }
+                conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                 conn.doOutput = true
                 conn.setRequestProperty("Content-Type", "application/json")
                 OutputStreamWriter(conn.outputStream).use {
@@ -155,13 +141,11 @@ class CreateKaryawanActivity : AppCompatActivity() {
                         put("password",Password.text.toString() )
                         put("telp",NoTelp.text.toString() )
                         put("username",Username.text.toString() )
-                        put("toko_id", tokoID)
                         put("toko_name", comboDitentitas.text)
                     }.toString())
                 }
 
                 val code = conn.responseCode
-                Log.e("data", code.toString())
 
                 val body = if (code in 200 until 300) {
                     conn.inputStream?.bufferedReader()?.use { it.readLine() }
@@ -172,8 +156,6 @@ class CreateKaryawanActivity : AppCompatActivity() {
 
                 withContext(Dispatchers.Main) {
                     val json = JSONObject(body!!)
-                    Log.e("Hasil",json.toString())
-
                     if (code in 200 until 300){
                         AlertDialog.Builder(this@CreateKaryawanActivity)
                             .setTitle("Information")

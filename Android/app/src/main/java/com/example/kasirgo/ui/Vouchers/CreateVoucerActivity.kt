@@ -13,7 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.kasirgo.MenuAdminActivity
 import com.example.kasirgo.R
 import com.example.kasirgo.Util.BaseAPI
-import com.example.kasirgo.Util.SharePref.Companion.getAuth
+import com.example.kasirgo.Util.SharePref
 import com.example.kasirgo.databinding.ActivityCreateVoucerBinding
 import com.example.kasirgo.library.ExceptionMessage
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -107,10 +107,7 @@ class CreateVoucerActivity : AppCompatActivity() {
                     val conn =
                         URL("${BaseAPI.BaseAPI}/api/voucer").openConnection() as HttpURLConnection
                     conn.requestMethod = "POST"
-
-                    getAuth()?.let {
-                        conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                    }
+                        conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                     conn.doOutput = true
                     conn.setRequestProperty("Content-Type", "application/json")
                     OutputStreamWriter(conn.outputStream).use {

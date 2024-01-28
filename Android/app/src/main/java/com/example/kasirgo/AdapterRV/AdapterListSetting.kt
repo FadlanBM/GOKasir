@@ -13,8 +13,6 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kasirgo.LoginActivity
 import com.example.kasirgo.R
-import com.example.kasirgo.Util.SharePref
-import com.example.kasirgo.Util.SharePref.Companion.setAuth
 import com.example.kasirgo.item.Setting
 import com.example.kasirgo.ui.setting.DataPribadiActivity
 import com.example.kasirgo.ui.setting.ResetPasswordActivity

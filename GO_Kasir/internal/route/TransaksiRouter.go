@@ -14,4 +14,5 @@ func TransaksiRoute(c fiber.Router) {
 	app.Get("/voucher/:code", Transaksi.ValidasiVoucer)
 	app.Post("/calculatePoint/:id", Transaksi.CalculatePoint)
 	app.Post("/", Transaksi.Create)
+	app.Post("/addBarangTransaksi/", Transaksi.AddBarangTransaksi)
 }

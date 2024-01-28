@@ -16,13 +16,10 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kasirgo.AdapterRV.AdapterCart
-import com.example.kasirgo.LoginActivity
-import com.example.kasirgo.MenuAdminActivity
-import com.example.kasirgo.MenuKasirActivity
 import com.example.kasirgo.R
 import com.example.kasirgo.Util.BaseAPI
 import com.example.kasirgo.Util.CartSharePreft
-import com.example.kasirgo.Util.SharePref.Companion.getAuth
+import com.example.kasirgo.Util.SharePref
 import com.example.kasirgo.Util.SwipeToDeleteCallback
 import com.example.kasirgo.item.itemCart
 import com.example.kasirgo.ui.Transaksi.TransaksiActivity
@@ -99,10 +96,7 @@ class KasirFragment : Fragment() {
                         val conn =
                             URL("${BaseAPI.BaseAPI}/api/transaksi/WithQr/${dataId}").openConnection() as HttpURLConnection
                         conn.requestMethod = "GET"
-
-                        requireContext().getAuth()?.let {
-                            conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                        }
+                         conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                         conn.setRequestProperty("Content-Type", "application/json")
                         val code = conn.responseCode
                         Log.e("data", code.toString())

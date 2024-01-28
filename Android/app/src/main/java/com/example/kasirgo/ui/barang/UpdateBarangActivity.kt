@@ -9,7 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.kasirgo.MenuAdminActivity
 import com.example.kasirgo.Util.BaseAPI
 import com.example.kasirgo.Util.IdKoneksi
-import com.example.kasirgo.Util.SharePref.Companion.getAuth
+import com.example.kasirgo.Util.SharePref
 import com.example.kasirgo.databinding.ActivityUpdateBarangBinding
 import com.example.kasirgo.library.ExceptionMessage
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -28,15 +28,11 @@ class UpdateBarangActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding=ActivityUpdateBarangBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
-
         binding.btnUpdateQR.setOnClickListener {
             val intent=Intent(this,ScanBCBarangActivity::class.java)
             intent.putExtra("status","updateBarang")
             startActivity(intent)
         }
-
         binding.btnSubmit.setOnClickListener {
             _UpdateBarang(IdKoneksi.idbarang)
         }
@@ -48,7 +44,6 @@ class UpdateBarangActivity : AppCompatActivity() {
         else{
             _GetDataBarang(id.toString(),"")
         }
-
         binding.btnRowBack.setOnClickListener {
             val intent=Intent(this@UpdateBarangActivity,MenuAdminActivity::class.java)
             intent.putExtra("back","barang")
@@ -101,10 +96,7 @@ class UpdateBarangActivity : AppCompatActivity() {
                 val conn =
                     URL("${BaseAPI.BaseAPI}/api/barang/${id}").openConnection() as HttpURLConnection
                 conn.requestMethod = "PUT"
-
-                getAuth()?.let {
-                    conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                }
+                    conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                 conn.doOutput = true
                 conn.setRequestProperty("Content-Type", "application/json")
                 OutputStreamWriter(conn.outputStream).use {
@@ -169,10 +161,7 @@ class UpdateBarangActivity : AppCompatActivity() {
                     val conn =
                         URL("${BaseAPI.BaseAPI}/api/barang/${id}").openConnection() as HttpURLConnection
                     conn.requestMethod = "GET"
-
-                    getAuth()?.let {
-                        conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                    }
+                     conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                     conn.setRequestProperty("Content-Type", "application/json")
 
                     val code = conn.responseCode

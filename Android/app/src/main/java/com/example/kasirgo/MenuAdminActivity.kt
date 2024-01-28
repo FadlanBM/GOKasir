@@ -16,6 +16,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import com.example.kasirgo.Util.SharePref
 import com.example.kasirgo.Util.SharePreftLogin
 import com.example.kasirgo.databinding.ActivityMenuAdminBinding
 import com.example.kasirgo.ui.setting.MainSettingActivity
@@ -70,7 +71,6 @@ class MenuAdminActivity : AppCompatActivity() {
         return true
     }
     override fun onBackPressed() {
-
         if (doubleBackToExitPressedOnce) {
             SharePreftLogin.id_user=""
             startActivity(Intent(this,LoginActivity::class.java))

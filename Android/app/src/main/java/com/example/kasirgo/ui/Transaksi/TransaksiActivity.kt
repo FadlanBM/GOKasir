@@ -11,32 +11,24 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kasirgo.AdapterRV.AdapterListBarangTransaksi
-import com.example.kasirgo.AdapterRV.AdapterListMember
 import com.example.kasirgo.MenuKasirActivity
 import com.example.kasirgo.R
 import com.example.kasirgo.Util.BaseAPI
 import com.example.kasirgo.Util.CartSharePreft
-import com.example.kasirgo.Util.SharePref.Companion.getAuth
+import com.example.kasirgo.Util.SharePref
 import com.example.kasirgo.Util.SharePreftTransaksi
 import com.example.kasirgo.databinding.ActivityTransaksiBinding
 import com.example.kasirgo.item.itemCart
-import com.example.kasirgo.item.itemMember
-import com.example.kasirgo.library.ExceptionMessage
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
-import org.w3c.dom.Text
 import java.io.OutputStreamWriter
-import java.lang.RuntimeException
 import java.net.HttpURLConnection
 import java.net.URL
 import java.text.NumberFormat
@@ -268,10 +260,7 @@ class TransaksiActivity : AppCompatActivity() {
                     val conn =
                         URL("${BaseAPI.BaseAPI}/api/transaksi/voucher/$code").openConnection() as HttpURLConnection
                     conn.requestMethod = "GET"
-
-                    getAuth()?.let {
-                        conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                    }
+                    conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                     conn.setRequestProperty("Content-Type", "application/json")
                     val code = conn.responseCode
 
@@ -313,10 +302,7 @@ class TransaksiActivity : AppCompatActivity() {
                 val conn =
                     URL("${BaseAPI.BaseAPI}/api/transaksi/addmember").openConnection() as HttpURLConnection
                 conn.requestMethod = "POST"
-
-                getAuth()?.let {
-                    conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                }
+                conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                 conn.doOutput = true
                 conn.setRequestProperty("Content-Type", "application/json")
                 OutputStreamWriter(conn.outputStream).use {
@@ -360,16 +346,11 @@ class TransaksiActivity : AppCompatActivity() {
             withContext(Dispatchers.IO) {
                 try {
                     val ids = CartSharePreft(this@TransaksiActivity).getId()
-                    Log.e("idCart", ids.toString())
-
                     for (dataId in ids) {
                         val conn =
                             URL("${BaseAPI.BaseAPI}/api/transaksi/WithQr/${dataId}").openConnection() as HttpURLConnection
                         conn.requestMethod = "GET"
-
-                        getAuth()?.let {
-                            conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                        }
+                        conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                         conn.setRequestProperty("Content-Type", "application/json")
                         val code = conn.responseCode
                         Log.e("data", code.toString())
@@ -381,7 +362,6 @@ class TransaksiActivity : AppCompatActivity() {
                         }
                         val jsonBarang = JSONObject(body!!)
                         val dataBarang = jsonBarang.getJSONArray("Data")
-                        Log.e("data", dataBarang.toString())
 
                         for (i in 0 until dataBarang.length()) {
                             val jsonObject = dataBarang.getJSONObject(i)

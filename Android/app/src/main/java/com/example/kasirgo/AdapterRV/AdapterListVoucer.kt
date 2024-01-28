@@ -13,8 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.kasirgo.MenuAdminActivity
 import com.example.kasirgo.R
 import com.example.kasirgo.Util.BaseAPI
-import com.example.kasirgo.Util.SharePref.Companion.getAuth
-import com.example.kasirgo.item.itemKaryawan
+import com.example.kasirgo.Util.SharePref
 import com.example.kasirgo.item.itemVoucer
 import com.example.kasirgo.ui.Vouchers.UpdateVoucerActivity
 import kotlinx.coroutines.CoroutineScope
@@ -76,10 +75,7 @@ class AdapterListVoucer(val item:List<itemVoucer>, val context: Context, private
                     val conn =
                         URL("${BaseAPI.BaseAPI}/api/voucer/${id}").openConnection() as HttpURLConnection
                     conn.requestMethod = "DELETE"
-
-                    context.getAuth()?.let {
-                        conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                    }
+                     conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                     conn.setRequestProperty("Content-Type", "application/json")
 
                     val code = conn.responseCode

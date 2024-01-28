@@ -5,22 +5,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
-import com.example.kasirgo.MenuAdminActivity
-import com.example.kasirgo.MenuKasirActivity
-import com.example.kasirgo.R
 import com.example.kasirgo.Util.BaseAPI
-import com.example.kasirgo.Util.SharePref.Companion.getAuth
-import com.example.kasirgo.Util.SharePref.Companion.setAuth
+import com.example.kasirgo.Util.SharePref
 import com.example.kasirgo.Util.SharePreftLogin
 import com.example.kasirgo.Util.SharePreftTransaksi
 import com.example.kasirgo.databinding.ActivityPembayaranBinding
-import com.example.kasirgo.library.ExceptionMessage
 import com.example.kasirgo.ui.SplashScreen.SuccessSplashActivity
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -83,8 +76,10 @@ class PembayaranActivity : AppCompatActivity() {
         }
 
         binding.btnSubmitPembelian.setOnClickListener {
+            if (binding.tiPembayaran.text!!.isNotEmpty()){
             Log.e("Total",totalKembalian.toString())
             _AddTransaksi(totalKembalian)
+            }
         }
     }
 
@@ -118,10 +113,7 @@ class PembayaranActivity : AppCompatActivity() {
                     val conn =
                         URL("${BaseAPI.BaseAPI}/api/transaksi").openConnection() as HttpURLConnection
                     conn.requestMethod = "POST"
-
-                    getAuth()?.let {
-                        conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                    }
+                     conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                     conn.doOutput = true
                     conn.setRequestProperty("Content-Type", "application/json")
                     OutputStreamWriter(conn.outputStream).use {
@@ -145,6 +137,7 @@ class PembayaranActivity : AppCompatActivity() {
                         conn.errorStream?.bufferedReader()?.use { it.readLine() }
                     }
                     withContext(Dispatchers.Main) {
+                        Log.e("Body",body.toString())
                         if (code !in 200 until 300) {
                             if (code == 400) {
                                 Toast.makeText(
@@ -162,7 +155,6 @@ class PembayaranActivity : AppCompatActivity() {
                                 _AddPoint(id_member.toString())
                             }
                             startActivity(Intent(this@PembayaranActivity,SuccessSplashActivity::class.java))
-
                         }
                     }
                 }catch (e:java.lang.Exception){
@@ -181,10 +173,7 @@ class PembayaranActivity : AppCompatActivity() {
                     val conn =
                         URL("${BaseAPI.BaseAPI}/api/transaksi/calculatePoint/$idMember").openConnection() as HttpURLConnection
                     conn.requestMethod = "POST"
-
-                    getAuth()?.let {
-                        conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                    }
+                    conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                     conn.doOutput = true
                     conn.setRequestProperty("Content-Type", "application/json")
                     OutputStreamWriter(conn.outputStream).use {

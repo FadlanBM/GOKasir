@@ -7,11 +7,8 @@ import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import com.example.kasirgo.MenuAdminActivity
-import com.example.kasirgo.R
 import com.example.kasirgo.Util.BaseAPI
-import com.example.kasirgo.Util.SharePref.Companion.getAuth
-import com.example.kasirgo.databinding.ActivityCreateKaryawanBinding
-import com.example.kasirgo.databinding.ActivityUpdateKaryawanBinding
+import com.example.kasirgo.Util.SharePref
 import com.example.kasirgo.databinding.ActivityUpdateMemberBinding
 import com.example.kasirgo.library.ExceptionMessage
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -51,10 +48,7 @@ class UpdateMemberActivity : AppCompatActivity() {
                 val conn =
                     URL("${BaseAPI.BaseAPI}/api/members/${id}").openConnection() as HttpURLConnection
                 conn.requestMethod = "GET"
-
-                getAuth()?.let {
-                    conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                }
+                conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                 conn.setRequestProperty("Content-Type", "application/json")
 
                 val code = conn.responseCode
@@ -121,10 +115,7 @@ class UpdateMemberActivity : AppCompatActivity() {
                 val conn =
                         URL("http://10.0.2.2:8080/api/members/${id}").openConnection() as HttpURLConnection
                 conn.requestMethod = "PUT"
-
-                getAuth()?.let {
-                    conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                }
+                conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                 conn.doOutput = true
                 conn.setRequestProperty("Content-Type", "application/json")
                 OutputStreamWriter(conn.outputStream).use {
@@ -134,10 +125,7 @@ class UpdateMemberActivity : AppCompatActivity() {
                         put("phone",nohp.text.toString() )
                     }.toString())
                 }
-
                 val code = conn.responseCode
-                Log.e("data", code.toString())
-
                 val body = if (code in 200 until 300) {
                     conn.inputStream?.bufferedReader()?.use { it.readLine() }
                 } else {

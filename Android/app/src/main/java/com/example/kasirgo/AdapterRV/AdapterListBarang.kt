@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.kasirgo.MenuAdminActivity
 import com.example.kasirgo.R
 import com.example.kasirgo.Util.BaseAPI
-import com.example.kasirgo.Util.SharePref.Companion.getAuth
+import com.example.kasirgo.Util.SharePref
 import com.example.kasirgo.item.itemBarang
 import com.example.kasirgo.ui.barang.UpdateBarangActivity
 import kotlinx.coroutines.CoroutineScope
@@ -70,10 +70,7 @@ class AdapterListBarang(val item:List<itemBarang>, val context: Context, private
                     val conn =
                         URL("${BaseAPI.BaseAPI}/api/barang/${id}").openConnection() as HttpURLConnection
                     conn.requestMethod = "DELETE"
-
-                    context.getAuth()?.let {
-                        conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                    }
+                     conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                     conn.setRequestProperty("Content-Type", "application/json")
 
                     val code = conn.responseCode

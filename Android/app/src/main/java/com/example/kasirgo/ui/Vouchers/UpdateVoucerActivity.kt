@@ -10,12 +10,9 @@ import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import com.example.kasirgo.MenuAdminActivity
-import com.example.kasirgo.R
 import com.example.kasirgo.Util.BaseAPI
-import com.example.kasirgo.Util.IdKoneksi
-import com.example.kasirgo.Util.SharePref.Companion.getAuth
+import com.example.kasirgo.Util.SharePref
 import com.example.kasirgo.databinding.ActivityCreateVoucerBinding
-import com.example.kasirgo.databinding.ActivityUpdateKaryawanBinding
 import com.example.kasirgo.library.ExceptionMessage
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -111,10 +108,7 @@ class UpdateVoucerActivity : AppCompatActivity() {
                     val conn =
                         URL("${BaseAPI.BaseAPI}/api/voucer/${id}").openConnection() as HttpURLConnection
                     conn.requestMethod = "PUT"
-
-                    getAuth()?.let {
-                        conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                    }
+                    conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                     conn.doOutput = true
                     conn.setRequestProperty("Content-Type", "application/json")
                     OutputStreamWriter(conn.outputStream).use {
@@ -183,10 +177,7 @@ class UpdateVoucerActivity : AppCompatActivity() {
                     val conn =
                         URL("${BaseAPI.BaseAPI}/api/voucer/${id}").openConnection() as HttpURLConnection
                     conn.requestMethod = "GET"
-
-                    getAuth()?.let {
-                        conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                    }
+                    conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                     conn.setRequestProperty("Content-Type", "application/json")
 
                     val code = conn.responseCode
@@ -200,7 +191,6 @@ class UpdateVoucerActivity : AppCompatActivity() {
 
                     withContext(Dispatchers.Main) {
                         val karyawanJson= JSONObject(body!!)
-                        Log.e("json",karyawanJson.toString())
                         val listvoucer=karyawanJson.getJSONArray("Data")
                         for (i in 0 until listvoucer.length()){
                             val datavoucer=listvoucer.getJSONObject(i)
@@ -236,7 +226,6 @@ class UpdateVoucerActivity : AppCompatActivity() {
         val datePickerDialog = DatePickerDialog(
             this,
             { _, year, month, dayOfMonth ->
-                // Menangani pemilihan tanggal dari dialog
                 val formattedMonth = (month + 1).toString().padStart(2, '0')
                 val formattedDay = dayOfMonth.toString().padStart(2, '0')
                 val selectedDate = "01/$formattedMonth/$year"
@@ -258,7 +247,6 @@ class UpdateVoucerActivity : AppCompatActivity() {
         val datePickerDialog = DatePickerDialog(
             this,
             { _, year, month, dayOfMonth ->
-                // Menangani pemilihan tanggal dari dialog
                 val formattedMonth = (month + 1).toString().padStart(2, '0')
                 val formattedDay = dayOfMonth.toString().padStart(2, '0')
                 val selectedDate = "01/$formattedMonth/$year"

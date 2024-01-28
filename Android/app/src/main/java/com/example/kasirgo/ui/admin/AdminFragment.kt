@@ -9,14 +9,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import com.example.kasirgo.AdapterRV.AdapterListKaryawan
 import com.example.kasirgo.AdapterRV.AdaterListAdmin
 import com.example.kasirgo.Util.BaseAPI
-import com.example.kasirgo.Util.SharePref.Companion.getAuth
+import com.example.kasirgo.Util.SharePref
 import com.example.kasirgo.databinding.FragmentAdminBinding
-import com.example.kasirgo.databinding.FragmentKaryawanBinding
 import com.example.kasirgo.item.itemAdmin
-import com.example.kasirgo.item.itemKaryawan
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -53,10 +50,7 @@ class AdminFragment : Fragment() {
                 val conn =
                     URL("${BaseAPI.BaseAPI}/api/admin").openConnection() as HttpURLConnection
                 conn.requestMethod = "GET"
-
-                requireContext().getAuth()?.let {
-                    conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                }
+                    conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                 conn.setRequestProperty("Content-Type", "application/json")
                 val code = conn.responseCode
                 Log.e("data", code.toString())

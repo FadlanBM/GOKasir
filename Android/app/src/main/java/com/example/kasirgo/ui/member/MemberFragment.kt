@@ -9,12 +9,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import com.example.kasirgo.AdapterRV.AdapterListKaryawan
 import com.example.kasirgo.AdapterRV.AdapterListMember
 import com.example.kasirgo.Util.BaseAPI
-import com.example.kasirgo.Util.SharePref.Companion.getAuth
+import com.example.kasirgo.Util.SharePref
 import com.example.kasirgo.databinding.FragmentMemberBinding
-import com.example.kasirgo.item.itemKaryawan
 import com.example.kasirgo.item.itemMember
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,9 +39,7 @@ class MemberFragment : Fragment() {
         binding.btnAdd.setOnClickListener {
             startActivity(Intent(requireContext(),CreateMemberActivity::class.java))
         }
-
         _GetMember()
-
         return root
     }
 
@@ -59,14 +55,9 @@ class MemberFragment : Fragment() {
                 val conn =
                     URL("${BaseAPI.BaseAPI}/api/members").openConnection() as HttpURLConnection
                 conn.requestMethod = "GET"
-
-                requireContext().getAuth()?.let {
-                    conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                }
+                conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                 conn.setRequestProperty("Content-Type", "application/json")
                 val code = conn.responseCode
-                Log.e("data", code.toString())
-
                 val body = if (code in 200 until 300) {
                     conn.inputStream?.bufferedReader()?.use { it.readLine() }
                 } else {

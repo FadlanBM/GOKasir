@@ -2,26 +2,11 @@ package com.example.kasirgo.ui.setting
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.kasirgo.AdapterRV.AdapterListKaryawan
 import com.example.kasirgo.AdapterRV.AdapterListSetting
-import com.example.kasirgo.R
-import com.example.kasirgo.Util.BaseAPI
-import com.example.kasirgo.Util.SharePref.Companion.getAuth
-import com.example.kasirgo.databinding.ActivityMenuAdminBinding
 import com.example.kasirgo.databinding.ActivitySettingBinding
 import com.example.kasirgo.item.Setting
-import com.example.kasirgo.item.itemKaryawan
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.json.JSONObject
-import java.net.HttpURLConnection
-import java.net.URL
-
 class   MainSettingActivity : AppCompatActivity() {
     private lateinit var binding:ActivitySettingBinding
     private lateinit var recyclerViewSettings: RecyclerView

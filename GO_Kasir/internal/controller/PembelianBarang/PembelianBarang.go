@@ -60,17 +60,17 @@ func Create(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"Status": "Error", "Message": err.Error()})
 	}
 
-	karyawan := models.PembelianBarang{
-		TransaksiID:   req.TransaksiID,
-		BarangID:      req.BarangID,
+	barangTransaksi := models.PembelianBarang{
+		TransaksiID:   existingTransaksi.ID,
+		BarangID:      existingBarang.ID,
 		Quantity:      req.Quantity,
 		SubTotalHarga: req.SubTotalHarga,
 	}
 
-	if err := config.DB.Create(&karyawan).Error; err != nil {
+	if err := config.DB.Create(&barangTransaksi).Error; err != nil {
 		return c.Status(400).JSON(fiber.Map{"Status": "Error", "Message": err.Error()})
 	}
-	return c.Status(200).JSON(fiber.Map{"Status": "Insert", "Message": "Successfully created", "Data": karyawan})
+	return c.Status(200).JSON(fiber.Map{"Status": "Insert", "Message": "Successfully created", "Data": barangTransaksi})
 }
 
 // Detail godoc

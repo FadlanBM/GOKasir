@@ -7,6 +7,8 @@ import android.os.Handler
 import android.widget.Toast
 import androidx.viewpager.widget.ViewPager
 import com.example.kasirgo.AdaptorTL.AdapterMenuTL
+import com.example.kasirgo.Util.SharePref
+import com.example.kasirgo.Util.SharePreftLogin
 import com.example.kasirgo.databinding.ActivityMenuKasirBinding
 import com.google.android.material.tabs.TabLayout
 
@@ -54,8 +56,8 @@ class MenuKasirActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-
         if (doubleBackToExitPressedOnce) {
+            SharePreftLogin.id_user=""
             startActivity(Intent(this,LoginActivity::class.java))
             return
         }

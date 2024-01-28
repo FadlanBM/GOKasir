@@ -883,7 +883,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Crud PembelianBarang"
+                    "Crud Transaksi"
                 ],
                 "parameters": [
                     {
@@ -892,7 +892,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.PembelianBarangRequest"
+                            "$ref": "#/definitions/request.RequesPembelian"
                         }
                     }
                 ],
@@ -1737,6 +1737,23 @@ const docTemplate = `{
                 },
                 "username": {
                     "type": "string"
+                }
+            }
+        },
+        "request.RequesPembelian": {
+            "type": "object",
+            "properties": {
+                "barang_id": {
+                    "type": "integer"
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "subTotalHarga": {
+                    "type": "number"
+                },
+                "transaksi_id": {
+                    "type": "integer"
                 }
             }
         },

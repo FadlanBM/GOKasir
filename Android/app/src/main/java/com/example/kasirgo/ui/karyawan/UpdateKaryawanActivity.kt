@@ -4,13 +4,15 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import com.example.kasirgo.MenuAdminActivity
 import com.example.kasirgo.R
 import com.example.kasirgo.Util.BaseAPI
-import com.example.kasirgo.Util.SharePref.Companion.getAuth
-import com.example.kasirgo.databinding.ActivityCreateKaryawanBinding
+import com.example.kasirgo.Util.SharePref
 import com.example.kasirgo.databinding.ActivityUpdateKaryawanBinding
 import com.example.kasirgo.library.ExceptionMessage
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -29,6 +31,7 @@ class UpdateKaryawanActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding= ActivityUpdateKaryawanBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        _GetToko()
 
         binding.btnRowBack.setOnClickListener {
             val intent=Intent(this,MenuAdminActivity::class.java)
@@ -50,17 +53,48 @@ class UpdateKaryawanActivity : AppCompatActivity() {
         super.onBackPressed()
     }
 
+    private fun _GetToko() {
+        lifecycleScope.launch() {
+            withContext(Dispatchers.IO) {
+                val conn = URL("${BaseAPI.BaseAPI}/api/tokoprofile").openConnection() as HttpURLConnection
+                conn.requestMethod = "GET"
+                conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
+                conn.setRequestProperty("Content-Type", "application/json")
+                val code = conn.responseCode
+                val body = if (code in 200 until 300) {
+                    conn.inputStream?.bufferedReader()?.use { it.readLine() }
+                } else {
+                    conn.errorStream?.bufferedReader()?.use { it.readLine() }
+                }
+                withContext(Dispatchers.Main) {
+                    val jsontoko = JSONObject(body!!)
+                    val jsonArray=jsontoko.getJSONArray("data")
+                    val item =ArrayList<String>()
+                    for (i in 0 until jsonArray.length()){
+                        val jsonObject=jsonArray.getJSONObject(i)
+                        val namaToko=jsonObject.getString("name")
+                        item.add(namaToko)
+                    }
+                    var autoComplite: AutoCompleteTextView =binding.comboBoxListToko
+                    var adapter= ArrayAdapter(this@UpdateKaryawanActivity, R.layout.list_toko,item)
+
+                    autoComplite.setAdapter(adapter)
+                    autoComplite.onItemClickListener=
+                        AdapterView.OnItemClickListener { adapterView, view, i, l ->
+                            val itemSelected=adapterView.getItemAtPosition(i)
+                        }
+                }
+            }
+        }
+    }
+
 
     private fun _GetDataKaryawan(id:String) {
         lifecycleScope.launch() {
             withContext(Dispatchers.IO) {
-                val conn =
-                    URL("${BaseAPI.BaseAPI}/api/karyawan/${id}").openConnection() as HttpURLConnection
+                val conn = URL("${BaseAPI.BaseAPI}/api/karyawan/${id}").openConnection() as HttpURLConnection
                 conn.requestMethod = "GET"
-
-                getAuth()?.let {
-                    conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                }
+                conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                 conn.setRequestProperty("Content-Type", "application/json")
 
                 val code = conn.responseCode
@@ -87,8 +121,6 @@ class UpdateKaryawanActivity : AppCompatActivity() {
             }
         }
     }
-
-
     private fun _UpdateKaryawan(id: String) {
         val handler = CoroutineExceptionHandler { _, e ->
             if (e is Exception) {
@@ -114,21 +146,17 @@ class UpdateKaryawanActivity : AppCompatActivity() {
                 val Nik=binding.tiNikPetugas
                 val Username=binding.tiUsername
                 val NoTelp=binding.tiNoTelp
-                var tokoID=0
+                val comboDitentitas=binding.comboBoxListToko
 
                 if (Nama.text.toString().isBlank()) throw ExceptionMessage.IgnorableException("Form Nama Petugas masih kosong")
                 if (Nik.text.toString().isBlank()) throw ExceptionMessage.IgnorableException("Form Nik Petugas masih kosong")
                 if (Username.text.toString().isBlank()) throw ExceptionMessage.IgnorableException("Form Username masih kosong")
                 if (NoTelp.text.toString().isBlank()) throw ExceptionMessage.IgnorableException("Form No Telp Petugas masih kosong")
+                if (comboDitentitas.text.toString().isBlank()) throw ExceptionMessage.IgnorableException("Form Comfirm Password Petugas masih kosong")
 
-                val conn =
-                    URL("http://10.0.2.2:8080/api/karyawan/${id}").openConnection() as HttpURLConnection
+                val conn = URL("http://10.0.2.2:8080/api/karyawan/${id}").openConnection() as HttpURLConnection
                 conn.requestMethod = "PUT"
-
-                getAuth()?.let {
-                    conn.setRequestProperty("Authorization", "Bearer ${it.getString("token")}")
-                    tokoID=it.getInt("toko_id")
-                }
+                conn.setRequestProperty("Authorization", "Bearer $SharePref.token}")
                 conn.doOutput = true
                 conn.setRequestProperty("Content-Type", "application/json")
                 OutputStreamWriter(conn.outputStream).use {
@@ -137,13 +165,10 @@ class UpdateKaryawanActivity : AppCompatActivity() {
                         put("nik",Nik.text.toString())
                         put("telp",NoTelp.text.toString() )
                         put("username",Username.text.toString() )
-                        put("toko_id", tokoID)
+                        put("toko_name", comboDitentitas.text)
                     }.toString())
                 }
-
                 val code = conn.responseCode
-                Log.e("data", code.toString())
-
                 val body = if (code in 200 until 300) {
                     conn.inputStream?.bufferedReader()?.use { it.readLine() }
                 } else {

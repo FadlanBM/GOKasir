@@ -67,6 +67,17 @@ definitions:
       username:
         type: string
     type: object
+  request.RequesPembelian:
+    properties:
+      barang_id:
+        type: integer
+      quantity:
+        type: integer
+      subTotalHarga:
+        type: number
+      transaksi_id:
+        type: integer
+    type: object
   request.RequestBiayaTransaksi:
     properties:
       total_price:
@@ -734,7 +745,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/request.PembelianBarangRequest'
+          $ref: '#/definitions/request.RequesPembelian'
       produces:
       - application/json
       responses:
@@ -747,7 +758,7 @@ paths:
           schema:
             $ref: '#/definitions/response.ResponseError'
       tags:
-      - Crud PembelianBarang
+      - Crud Transaksi
   /api/pembelianbarang/{id}:
     delete:
       consumes:
