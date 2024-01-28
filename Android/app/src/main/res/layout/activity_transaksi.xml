@@ -63,22 +63,25 @@
                             android:text="Nama Member"
                             android:fontFamily="@font/poppinsregular"
                             android:textSize="@dimen/_10ssp"/>
+
                         <TextView
                             android:id="@+id/tvNameMemberTransaksi"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppinssemibold"
                             android:text="-"
-                            android:textSize="@dimen/_10ssp"
-                            android:fontFamily="@font/poppinssemibold"/>
+                            android:textSize="@dimen/_10ssp" />
                         <TextView
+                            android:id="@+id/tvCodeMemberTransaksi"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="asdsaasA"
+                            android:text="-"
                             android:textSize="@dimen/_10ssp"
                             android:alpha="0.7"
                             android:fontFamily="@font/poppinsregular"/>
                     </LinearLayout>
                     <LinearLayout
+                        android:id="@+id/btn_addMember"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginEnd="@dimen/_20sdp"
@@ -194,6 +197,29 @@
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
+                        android:layout_marginTop="5dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Total Ppn"
+                            android:fontFamily="@font/poppinsregular"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="end">
+                            <TextView
+                                android:id="@+id/tvPpnTransaksi"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="-"
+                                android:layout_marginStart="@dimen/_3sdp"
+                                android:fontFamily="@font/poppinsregular"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_marginTop="3dp"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
@@ -230,28 +256,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="end">
                             <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="-"
-                                android:layout_marginStart="@dimen/_3sdp"
-                                android:fontFamily="@font/poppinsregular"/>
-                        </LinearLayout>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_marginTop="5dp"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Total Ppn"
-                            android:fontFamily="@font/poppinsregular"/>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="end">
-                            <TextView
+                                android:id="@+id/tvTotalPointMemberTran"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="-"
@@ -284,6 +289,7 @@
                             android:layout_gravity="center"
                             android:gravity="end">
                             <TextView
+                                android:id="@+id/tvtotalPembelanjaan"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="-"

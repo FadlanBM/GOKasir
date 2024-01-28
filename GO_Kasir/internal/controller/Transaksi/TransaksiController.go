@@ -29,6 +29,47 @@ func Index(c *fiber.Ctx) error {
 	return c.Status(200).JSON(fiber.Map{"Message": "Success", "Data": transaksi})
 }
 
+// DetailQR godoc
+// @Tags Crud Transaksi
+// @Accept json
+// @Produce json
+// @Param code path string true "Barang Code"
+// @Success 200 {object} response.ResponseDataSuccess
+// @Failure 400 {object} response.ResponseError
+// @Router /api/transaksi/WithQr/{code} [get]
+func DetailQR(c *fiber.Ctx) error {
+	codeParam := c.Params("code")
+
+	code, err := strconv.Atoi(codeParam)
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{"Status": "Error", "Message": err.Error()})
+	}
+
+	var barang []models.Barang
+	if err := config.DB.First(&barang, "code_barang = ?", code).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return c.Status(404).JSON(fiber.Map{"Status": "Error", "Message": "Record not found"})
+		}
+		return c.Status(500).JSON(fiber.Map{"Status": "Error", "Message": err.Error()})
+	}
+
+	var res []response.BarangResponse
+
+	for _, v := range barang {
+		voucerResponse := response.BarangResponse{
+			ID:         v.ID,
+			Name:       v.Name,
+			CodeBarang: v.CodeBarang,
+			Merek:      v.Merek,
+			Tipe:       v.Tipe,
+			Price:      v.Price,
+			Stock:      v.Stock,
+		}
+		res = append(res, voucerResponse)
+	}
+	return c.Status(200).JSON(fiber.Map{"Status": "Insert", "Message": "Successfully created", "Data": res})
+}
+
 // AddMember godoc
 // @Tags Crud Transaksi
 // @Accept json
@@ -119,40 +160,49 @@ func ValidasiVoucer(c *fiber.Ctx) error {
 	return c.Status(200).JSON(fiber.Map{"Status": "Validasi", "Message": "Voucher Exist", "Data": res})
 }
 
-// Calculate godoc
+// CalculatePoint godoc
 // @Tags Crud Transaksi
 // @Accept json
 // @Produce json
+// @Param id path string true "Member Id"
 // @Param request body request.RequestBiayaTransaksi true "Request"
 // @Success 200 {object} response.ResponseDataSuccess
 // @Failure 400 {object} response.ResponseError
-// @Router /api/transaksi/calculate [post]
-func Calculate(c *fiber.Ctx) error {
+// @Router /api/transaksi/calculatePoint/{id} [post]
+func CalculatePoint(c *fiber.Ctx) error {
 	req := new(request.RequestBiayaTransaksi)
 
-	_, errMember := ValidateMember(req.IdMember)
-	dataVoucher, errVoucher := ValidateVoucer(req.CodeVoucer)
+	idParam := c.Params("id")
 
-	if errMember != nil && len(req.IdMember) != 0 {
-		return c.Status(400).JSON(fiber.Map{"Status": "Error", "Message": "Member Is Not Found"})
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{"Status": "Error", "Message": err.Error()})
 	}
 
-	if errVoucher != nil && len(req.CodeVoucer) != 0 {
-		return c.Status(400).JSON(fiber.Map{"Status": "Error", "Message": "Voucher Is Not Found"})
+	var existingMember models.Member
+	if err := config.DB.First(&existingMember, id).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"Status": "Error", "Message": "ID Member tidak di temukan"})
+		}
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"Status": "Error", "Message": err.Error()})
 	}
 
 	jumlahPPN := req.TotalPrice * 0.10
 
-	total := req.TotalPrice + jumlahPPN - dataVoucher.Discount
-	SubTotal := total - req.NominalPembayaran
-	var poinBaru *int
+	total := req.TotalPrice + jumlahPPN
+	
+	var poinBaru uint
+	rasioPoin := 1000
+	poinBaru = uint(total) / uint(rasioPoin)
 
-	if len(req.CodeVoucer) != 0 && len(req.IdMember) != 0 {
-		rasioPoin := 1000
-		poinBaruInt := int(total) / rasioPoin
-		poinBaru = &poinBaruInt
+	existingMember.Point = poinBaru
+
+	existingMember.Point = poinBaru
+
+	if err := config.DB.Save(&existingMember).Error; err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"Status": "Error", "Message": err.Error()})
 	}
-	return c.Status(200).JSON(fiber.Map{"Status": "Success", "Total": SubTotal, "Point": poinBaru})
+	return c.Status(200).JSON(fiber.Map{"Status": "Success", "Point": poinBaru})
 }
 
 // Create godoc
@@ -181,16 +231,17 @@ func Create(c *fiber.Ctx) error {
 	}
 
 	dataVoucher, _ := ValidateVoucer(req.CodeVoucer)
+	dataMember, _ := ValidateMember(req.MemberID)
 
 	transaksi := models.Transaksi{
-		TotalPrice:    req.TotalPrice,
-		NominalTunai:  req.NominalPembayaran,
-		PPN:           req.Ppn,
-		Kembalian:     req.Kembalian,
-		Point:         req.Point,
-		VoucerID:      dataVoucher.ID,
-		KaryawanID:    existingKaryawan.ID,
-		TokoProfileID: existingKaryawan.TokoProfileID,
+		TotalPrice:   req.TotalPrice,
+		NominalTunai: req.NominalPembayaran,
+		PPN:          req.Ppn,
+		Kembalian:    req.Kembalian,
+		Point:        req.Point,
+		VoucerID:     dataVoucher.ID,
+		KaryawanID:   existingKaryawan.ID,
+		MemberID:     dataMember.ID,
 	}
 
 	if err := config.DB.Create(&transaksi).Error; err != nil {

@@ -10,5 +10,4 @@ type PembelianBarang struct {
 	Barang        Barang
 	Quantity      uint    `json:"quantity" form:"quantity"`
 	SubTotalHarga float64 `gorm:"type:decimal(15,2); not null" json:"subTotalHarga" form:"subTotalHarga"`
-	Discount      float64 `gorm:"type:dec" json:"discount" form:"discount"`
 }

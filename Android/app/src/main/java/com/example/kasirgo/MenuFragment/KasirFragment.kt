@@ -97,7 +97,7 @@ class KasirFragment : Fragment() {
 
                     for (dataId in ids) {
                         val conn =
-                            URL("${BaseAPI.BaseAPI}/api/barang/WithQr/${dataId}").openConnection() as HttpURLConnection
+                            URL("${BaseAPI.BaseAPI}/api/transaksi/WithQr/${dataId}").openConnection() as HttpURLConnection
                         conn.requestMethod = "GET"
 
                         requireContext().getAuth()?.let {

@@ -65,7 +65,6 @@ func Create(c *fiber.Ctx) error {
 		BarangID:      req.BarangID,
 		Quantity:      req.Quantity,
 		SubTotalHarga: req.SubTotalHarga,
-		Discount:      req.Discount,
 	}
 
 	if err := config.DB.Create(&karyawan).Error; err != nil {
@@ -150,7 +149,6 @@ func Update(c *fiber.Ctx) error {
 	existingBarangTransaksi.BarangID = existingBarang.ID
 	existingBarangTransaksi.Quantity = req.Quantity
 	existingBarangTransaksi.SubTotalHarga = req.SubTotalHarga
-	existingBarangTransaksi.Discount = req.Discount
 
 	if err := config.DB.Save(&existingBarangTransaksi).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"Status": "Error", "Message": err.Error()})

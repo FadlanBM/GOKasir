@@ -1685,9 +1685,6 @@ const docTemplate = `{
                 "barang_id": {
                     "type": "integer"
                 },
-                "discount": {
-                    "type": "number"
-                },
                 "quantity": {
                     "type": "integer"
                 },
@@ -1744,9 +1741,6 @@ const docTemplate = `{
                 },
                 "id_Member": {
                     "type": "string"
-                },
-                "nominal_pembayaran": {
-                    "type": "number"
                 },
                 "total_price": {
                     "type": "number"

@@ -99,9 +99,9 @@ class LoginActivity : AppCompatActivity() {
                 throw RuntimeException(e)
             }
         }
-            try {
         lifecycleScope.launch(handler) {
                 withContext(Dispatchers.IO) {
+                try {
                     if (binding.tiUsername.text.toString().isBlank()) throw ExceptionMessage.IgnorableException("Email cannot be empty")
                     if (binding.tiPassword.text.toString().isBlank()) throw ExceptionMessage.IgnorableException("Password cannot be empty")
 
@@ -125,8 +125,6 @@ class LoginActivity : AppCompatActivity() {
                     } else {
                         conn.errorStream?.bufferedReader()?.use { it.readLine() }
                     }
-
-
                     withContext(Dispatchers.Main) {
                         val json = JSONObject(body!!)
                         if (code !in 200 until 300) {
@@ -169,11 +167,12 @@ class LoginActivity : AppCompatActivity() {
                                 .show()
                         }
                     }
+                }catch (e:java.lang.Exception){
+                    Log.e("Error Http",e.message.toString())
                 }
+            }
 
-            }
-            }catch (e:java.lang.Exception){
-                Log.e("Error Http",e.message.toString())
-            }
+         }
+
     }
 }

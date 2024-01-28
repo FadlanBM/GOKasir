@@ -36,8 +36,6 @@ definitions:
     properties:
       barang_id:
         type: integer
-      discount:
-        type: number
       quantity:
         type: integer
       sub_total_harga:
@@ -75,8 +73,6 @@ definitions:
         type: string
       id_Member:
         type: string
-      nominal_pembayaran:
-        type: number
       total_price:
         type: number
     type: object

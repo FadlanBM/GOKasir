@@ -11,9 +11,7 @@ type Transaksi struct {
 	PPN             float64 `gorm:"type:decimal(15,2);not null" json:"ppn" form:"ppn"`
 	Kembalian       float64 `gorm:"type:decimal(15,2);not null" json:"kembalian" form:"kembalian"`
 	Point           uint    `json:"point" form:"point"`
-	TokoProfileID   uint
-	TokoProfile     TokoProfile
-	VoucerID        uint `gorm:"default:null"`
+	VoucerID        uint    `gorm:"default:null"`
 	Voucer          Voucer
 	MemberID        uint `gorm:"default:null"`
 	Member          Member

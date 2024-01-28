@@ -45,7 +45,7 @@ func Create(c *fiber.Ctx) error {
 	}
 
 	var existingToko models.TokoProfile
-	if err := config.DB.Find(&existingToko, "name = ?", register.NameToko).Error; err != nil {
+	if err := config.DB.First(&existingToko, "name = ?", register.NameToko).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			karyawan := models.TokoProfile{
 				Name:   register.NameToko,

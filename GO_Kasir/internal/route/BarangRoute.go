@@ -11,7 +11,6 @@ func BarangRoute(c fiber.Router) {
 	app.Get("/", Barang.Index)
 	app.Post("/", Barang.Create)
 	app.Get("/:id", Barang.Detail)
-	app.Get("/WithQr/:code", Barang.DetailQR)
 	app.Put("/:id", Barang.Update)
 	app.Delete("/:id", Barang.Delete)
 }

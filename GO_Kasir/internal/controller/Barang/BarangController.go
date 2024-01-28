@@ -92,47 +92,6 @@ func Create(c *fiber.Ctx) error {
 	return c.Status(200).JSON(fiber.Map{"Status": "Insert", "Message": "Successfully created", "Data": barang})
 }
 
-// DetailQR godoc
-// @Tags Crud Barang
-// @Accept json
-// @Produce json
-// @Param code path string true "Barang Code"
-// @Success 200 {object} response.ResponseDataSuccess
-// @Failure 400 {object} response.ResponseError
-// @Router /api/barang/WithQr/{code} [get]
-func DetailQR(c *fiber.Ctx) error {
-	codeParam := c.Params("code")
-
-	code, err := strconv.Atoi(codeParam)
-	if err != nil {
-		return c.Status(400).JSON(fiber.Map{"Status": "Error", "Message": err.Error()})
-	}
-
-	var barang []models.Barang
-	if err := config.DB.First(&barang, "code_barang = ?", code).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return c.Status(404).JSON(fiber.Map{"Status": "Error", "Message": "Record not found"})
-		}
-		return c.Status(500).JSON(fiber.Map{"Status": "Error", "Message": err.Error()})
-	}
-
-	var res []response.BarangResponse
-
-	for _, v := range barang {
-		voucerResponse := response.BarangResponse{
-			ID:         v.ID,
-			Name:       v.Name,
-			CodeBarang: v.CodeBarang,
-			Merek:      v.Merek,
-			Tipe:       v.Tipe,
-			Price:      v.Price,
-			Stock:      v.Stock,
-		}
-		res = append(res, voucerResponse)
-	}
-	return c.Status(200).JSON(fiber.Map{"Status": "Insert", "Message": "Successfully created", "Data": res})
-}
-
 // Detail godoc
 // @Tags Crud Barang
 // @Accept json

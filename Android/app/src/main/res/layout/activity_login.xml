@@ -46,7 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:backgroundTint="@color/blue"
-                android:text="admin"
+                android:text="string"
                 android:id="@+id/tiUsername"
                 android:hint="Masukkan Username"
                 android:textColor="@color/white" />
@@ -75,15 +75,16 @@
             app:hintTextColor="@color/white"
             app:passwordToggleTint="@color/white"
             app:boxStrokeColor="@android:color/white">
+
             <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:backgroundTint="@color/blue"
-                android:layout_height="match_parent"
-                android:text="admin"
-                android:inputType="textPassword"
-                android:textColor="@color/white"
                 android:id="@+id/tiPassword"
-                android:hint="Masukkan Password" />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:backgroundTint="@color/blue"
+                android:hint="Masukkan Password"
+                android:inputType="textPassword"
+                android:text="string"
+                android:textColor="@color/white" />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 </LinearLayout>

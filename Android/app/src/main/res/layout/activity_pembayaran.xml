@@ -73,12 +73,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end">
+
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="- Rp.100.000"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/_3sdp"
-                    android:fontFamily="@font/poppinsregular"/>
+                    android:fontFamily="@font/poppinsregular"
+                    android:text="-" />
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
@@ -98,7 +99,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="- Rp.100.000"
+                    android:text="-"
                     android:layout_marginStart="@dimen/_3sdp"
                     android:fontFamily="@font/poppinsregular"/>
             </LinearLayout>
@@ -130,7 +131,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Rp.100.000"
+                    android:text="-"
                     android:layout_marginStart="@dimen/_3sdp"
                     android:fontFamily="@font/poppinsregular"/>
             </LinearLayout>
