@@ -11,15 +11,16 @@ class CartSharePreft constructor(context: Context) {
         private const val shareId="id"
         private const val shareCount="count"
         private const val sharePrice="price"
+        private const val shareLimitCount="LimitCount"
     }
 
     val sharePreft: SharedPreferences =context.getSharedPreferences(shareName,Context.MODE_PRIVATE)
     val editorid: SharedPreferences.Editor=sharePreft.edit()
     val editorCount: SharedPreferences.Editor=sharePreft.edit()
     val editorrice: SharedPreferences.Editor=sharePreft.edit()
+    val editLimitCount: SharedPreferences.Editor=sharePreft.edit()
 
     fun saveId(id:String){
-        Log.e("idCart",id)
         val jsonArray= JSONArray()
         val exisId=sharePreft.getString(shareId,null)
         if (exisId!=null){
@@ -31,6 +32,19 @@ class CartSharePreft constructor(context: Context) {
         jsonArray.put(id)
         editorid.putString(shareId,jsonArray.toString())
         editorid.apply()
+    }
+    fun saveLimitCount(id:String){
+        val jsonArray= JSONArray()
+        val exisId=sharePreft.getString(shareLimitCount,null)
+        if (exisId!=null){
+            val countArray= JSONArray(exisId)
+            for (i in 0 until countArray.length()){
+                jsonArray.put(countArray.getString(i))
+            }
+        }
+        jsonArray.put(id)
+        editLimitCount.putString(shareLimitCount,jsonArray.toString())
+        editLimitCount.apply()
     }
 
     fun savePrice(data: String){
@@ -65,6 +79,18 @@ class CartSharePreft constructor(context: Context) {
         val data= mutableListOf<String>()
         if (priceExis!=null){
             val priceJson= JSONArray(priceExis)
+            for (i in 0 until priceJson.length()){
+                val item=priceJson.getString(i)
+                data.add(item)
+            }
+        }
+        return data
+    }
+  fun getLimitCart():List<String>{
+        val limitCountExis=sharePreft.getString(shareLimitCount,null)
+        val data= mutableListOf<String>()
+        if (limitCountExis!=null){
+            val priceJson= JSONArray(limitCountExis)
             for (i in 0 until priceJson.length()){
                 val item=priceJson.getString(i)
                 data.add(item)
@@ -131,26 +157,46 @@ class CartSharePreft constructor(context: Context) {
             editorCount.apply()
         }
     }
+    fun countLimitUpdate(potition:Int,data:String){
+        val countExis=sharePreft.getString(shareLimitCount,null)
+
+        if (countExis!=null){
+            val countJson= JSONArray(countExis)
+            for (i in 0 until countJson.length()){
+                if (i==potition){
+                    countJson.put(i, data)
+                    break
+                }
+            }
+            editLimitCount.putString(shareLimitCount,countJson.toString())
+            editLimitCount.apply()
+        }
+    }
 
 
     fun deleteData(potition: Int){
         val dataExisCount=sharePreft.getString(shareCount,null)
         val dataExisid=sharePreft.getString(shareId,null)
         val priceExis=sharePreft.getString(sharePrice,null)
+        val countLimit=sharePreft.getString(sharePrice,null)
             if (dataExisid!=null) {
                 val dataArrayid = JSONArray(dataExisid)
                 val dataArrayCount = JSONArray(dataExisCount)
                 val priceArray = JSONArray(priceExis)
+                val limitArray = JSONArray(countLimit)
                 for (i in 0 until dataArrayid.length()) {
                         if (i == potition) {
                             dataArrayid.remove(i)
                             dataArrayCount.remove(i)
                             priceArray.remove(i)
+                            priceArray.remove(i)
+                            limitArray.remove(i)
                         }
                 }
                 editorrice.putString(sharePrice,priceArray.toString()).apply()
                 editorCount.putString(shareCount,dataArrayCount.toString()).apply()
                 editorid.putString(shareId,dataArrayid.toString()).apply()
+                editLimitCount.putString(shareLimitCount,limitArray.toString()).apply()
             }
     }
 
@@ -158,5 +204,6 @@ class CartSharePreft constructor(context: Context) {
         editorrice.clear().apply()
         editorid.clear().apply()
         editorCount.clear().apply()
+        editLimitCount.clear().apply()
     }
 }

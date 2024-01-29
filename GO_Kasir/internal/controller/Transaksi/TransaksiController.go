@@ -215,7 +215,7 @@ func CalculatePoint(c *fiber.Ctx) error {
 // @Router /api/transaksi [post]
 func Create(c *fiber.Ctx) error {
 	req := new(request.RequestTransaksi)
-
+	var existingMember models.Member
 	err := c.BodyParser(req)
 
 	if err != nil {
@@ -230,14 +230,6 @@ func Create(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"Status": "Error", "Message": err.Error()})
 	}
 
-	var existingMember models.Member
-	if err := config.DB.First(&existingMember, req.MemberID).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"Status": "Error", "Message": "ID Member tidak di temukan"})
-		}
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"Status": "Error", "Message": err.Error()})
-	}
-
 	var dataVoucher *models.Voucer
 	if req.CodeVoucer != "" {
 		dataVoucher, _ = ValidateVoucer(req.CodeVoucer)
@@ -246,6 +238,12 @@ func Create(c *fiber.Ctx) error {
 	var dataMember *models.Member
 	if req.MemberID != 0 {
 		dataMember, _ = ValidateMember(req.MemberID)
+		if err := config.DB.First(&existingMember, dataMember.ID).Error; err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"Status": "Error", "Message": "ID Member tidak di temukan"})
+			}
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"Status": "Error", "Message": err.Error()})
+		}
 	}
 
 	transaksi := models.Transaksi{
@@ -264,13 +262,13 @@ func Create(c *fiber.Ctx) error {
 
 	if dataMember != nil {
 		transaksi.MemberID = dataMember.ID
-		dataMember.Point = existingMember.Point - req.Point
+		dataMember.Point = dataMember.Point - req.Point
+		if err := config.DB.Save(&existingMember).Error; err != nil {
+			return c.Status(400).JSON(fiber.Map{"Status": "error", "Message": err.Error()})
+		}
 	}
 
 	if err := config.DB.Create(&transaksi).Error; err != nil {
-		return c.Status(400).JSON(fiber.Map{"Status": "error", "Message": err.Error()})
-	}
-	if err := config.DB.Save(&dataMember).Error; err != nil {
 		return c.Status(400).JSON(fiber.Map{"Status": "error", "Message": err.Error()})
 	}
 	return c.Status(200).JSON(fiber.Map{"Status": "Insert", "Message": "Successfully created", "Data": transaksi})
@@ -283,7 +281,7 @@ func Create(c *fiber.Ctx) error {
 // @Param request body request.RequesPembelian true "Request"
 // @Success 200 {object} response.ResponseDataSuccess
 // @Failure 400 {object} response.ResponseError
-// @Router /api/pembelianbarang [post]
+// @Router /api/transaksi/addBarangTransaksi/ [post]
 func AddBarangTransaksi(c *fiber.Ctx) error {
 	req := new(request.RequesPembelian)
 
@@ -294,7 +292,7 @@ func AddBarangTransaksi(c *fiber.Ctx) error {
 	}
 
 	var existingBarang models.Barang
-	if err := config.DB.First(&existingBarang, req.BarangID).Error; err != nil {
+	if err := config.DB.Find(&existingBarang, "code_barang= ?", req.BarangID).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"Status": "Error", "Message": "ID Barang tidak di temukan"})
 		}
@@ -309,11 +307,21 @@ func AddBarangTransaksi(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"Status": "Error", "Message": err.Error()})
 	}
 
+	if existingBarang.Stock == 0 {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"Status": "Error", "Message": "ID Data Transaksi tidak di temukan"})
+	}
+
 	pembelianBarang := models.PembelianBarang{
 		TransaksiID:   existingTransaksi.ID,
 		BarangID:      existingBarang.ID,
 		Quantity:      req.Quantity,
 		SubTotalHarga: req.SubTotalHarga,
+	}
+
+	existingBarang.Stock = existingBarang.Stock - req.Quantity
+
+	if err := config.DB.Save(&existingBarang).Error; err != nil {
+		return c.Status(400).JSON(fiber.Map{"Status": "error", "Message": err.Error()})
 	}
 
 	if err := config.DB.Create(&pembelianBarang).Error; err != nil {

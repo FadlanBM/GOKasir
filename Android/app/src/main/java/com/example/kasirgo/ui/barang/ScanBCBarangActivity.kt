@@ -139,13 +139,20 @@ class ScanBCBarangActivity : AppCompatActivity() {
                         }
                         withContext(Dispatchers.Main) {
                             var IsStatus=false
+                            var IsCountLimit=true
                              if (code in 200 until 300) {
                                  val jsonKaryawan = JSONObject(body!!)
                                  val dataKaryawan=jsonKaryawan.getJSONArray("Data")
                                  for(i in 0 until dataKaryawan.length()) {
                                      val jsonObject = dataKaryawan.getJSONObject(i)
+                                     val stock=jsonObject.getString("stock")
                                      val id = jsonObject.getString("code_barang")
                                      val price = jsonObject.getString("price")
+                                     if (stock.toInt()==0) IsCountLimit=false
+                                     if (IsCountLimit==false){
+                                         Toast.makeText(this@ScanBCBarangActivity,"Stock Barang Sudah Habis",Toast.LENGTH_SHORT).show()
+                                         return@withContext
+                                     }
 
                                      val idExis=CartSharePreft(this@ScanBCBarangActivity).getId()
                                      val countExis=CartSharePreft(this@ScanBCBarangActivity).getCount()
@@ -156,6 +163,7 @@ class ScanBCBarangActivity : AppCompatActivity() {
                                          if (ids==id){
                                              val pCount = idExis.indexOf(id)
                                              CartSharePreft(this@ScanBCBarangActivity).countUpdate(pCount,(countlist!!.toInt()+1).toString())
+                                             CartSharePreft(this@ScanBCBarangActivity).countLimitUpdate(pCount,(countlist!!.toInt()).toString())
                                              val intent=Intent(this@ScanBCBarangActivity, MenuKasirActivity::class.java)
                                              intent.putExtra("status","kasir")
                                              startActivity(intent)
@@ -164,6 +172,7 @@ class ScanBCBarangActivity : AppCompatActivity() {
                                      }
                                      if (IsStatus!=true){
                                          CartSharePreft(this@ScanBCBarangActivity).saveId(id)
+                                         CartSharePreft(this@ScanBCBarangActivity).saveLimitCount(stock)
                                          CartSharePreft(this@ScanBCBarangActivity).savePrice(price)
                                          CartSharePreft(this@ScanBCBarangActivity).saveCount("1")
                                      }

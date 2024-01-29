@@ -9,5 +9,5 @@ type Barang struct {
 	Merek      string  `gorm:"type:varchar(50);not nutt" json:"merek" form:"merek"`
 	Tipe       string  `gorm:"type:varchar(50);not null" json:"tipe" form:"tipe"`
 	Price      float64 `gorm:"type:decimal(15,2);not null" json:"price" form:"price"`
-	Stock      int     `json:"stock" form:"stock"`
+	Stock      uint    `json:"stock" form:"stock"`
 }

@@ -883,7 +883,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Crud Transaksi"
+                    "Crud PembelianBarang"
                 ],
                 "parameters": [
                     {
@@ -892,7 +892,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.RequesPembelian"
+                            "$ref": "#/definitions/request.PembelianBarangRequest"
                         }
                     }
                 ],
@@ -1320,6 +1320,44 @@ const docTemplate = `{
                         "name": "code",
                         "in": "path",
                         "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/transaksi/addBarangTransaksi/": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Crud Transaksi"
+                ],
+                "parameters": [
+                    {
+                        "description": "Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.RequesPembelian"
+                        }
                     }
                 ],
                 "responses": {

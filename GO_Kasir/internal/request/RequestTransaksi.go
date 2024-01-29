@@ -9,7 +9,7 @@ type RequestPPNTransaksi struct {
 
 type RequesPembelian struct {
 	TransaksiID   uint    `json:"transaksi_id" form:"transaksi_id"`
-	BarangID      uint    `json:"barang_id" form:"barang_id"`
+	BarangID      string  `json:"barang_id" form:"barang_id"`
 	Quantity      uint    `json:"quantity" form:"quantity"`
 	SubTotalHarga float64 `json:"subTotalHarga" form:"subTotalHarga"`
 }

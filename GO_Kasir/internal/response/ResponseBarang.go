@@ -7,5 +7,5 @@ type BarangResponse struct {
 	Merek      string  `json:"merek"`
 	Tipe       string  `json:"tipe"`
 	Price      float64 `json:"price"`
-	Stock      int     `json:"stock"`
+	Stock      uint    `json:"stock"`
 }

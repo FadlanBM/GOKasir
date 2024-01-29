@@ -6,5 +6,5 @@ type BarangRequest struct {
 	Code  string  `json:"code"`
 	Tipe  string  `json:"tipe"`
 	Price float64 `json:"price"`
-	Stok  int     `json:"stok"`
+	Stok  uint    `json:"stok"`
 }
