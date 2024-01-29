@@ -163,6 +163,7 @@ class PembayaranActivity : AppCompatActivity() {
                                 _AddPoint(id_member.toString())
                             }
                             _AddBarang(idTransaksi)
+                            clearSharePreftTransaksi()
                             startActivity(
                                 Intent(
                                     this@PembayaranActivity,
@@ -178,6 +179,14 @@ class PembayaranActivity : AppCompatActivity() {
 
         }
 
+    }
+
+    private fun clearSharePreftTransaksi(){
+        SharePreftTransaksi().codeVoucer=""
+        SharePreftTransaksi().member_id=0
+        SharePreftTransaksi().ppn=0
+        SharePreftTransaksi().totalPrice=0
+        SharePreftTransaksi().point=0
     }
 
     private fun _AddPoint(idMember: String) {

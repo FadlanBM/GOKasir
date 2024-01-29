@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.RadioButton
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import com.example.kasirgo.MenuAdminActivity
@@ -35,6 +36,15 @@ class UpdateVoucerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding=ActivityCreateVoucerBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.rbActive.setOnClickListener {
+            logicRb(binding.rbNonActive)
+        }
+
+        binding.rbNonActive.setOnClickListener {
+            logicRb(binding.rbActive)
+        }
+
 
         binding.btnRowBack.setOnClickListener {
             val intent= Intent(this, MenuAdminActivity::class.java)
@@ -69,6 +79,12 @@ class UpdateVoucerActivity : AppCompatActivity() {
         super.onBackPressed()
     }
 
+    private fun logicRb(clickedRadioButton: RadioButton) {
+        if (clickedRadioButton.isChecked) {
+            binding.rbActive.isChecked = clickedRadioButton == binding.rbNonActive
+            binding.rbNonActive.isChecked = clickedRadioButton == binding.rbActive
+        }
+    }
     private fun UpdateKaryawan(id:String) {
         val handler = CoroutineExceptionHandler { _, e ->
             if (e is Exception) {

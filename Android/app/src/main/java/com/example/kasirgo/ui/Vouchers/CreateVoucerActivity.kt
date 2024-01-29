@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.RadioButton
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import com.example.kasirgo.MenuAdminActivity
@@ -38,6 +39,14 @@ class CreateVoucerActivity : AppCompatActivity() {
         binding=ActivityCreateVoucerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.rbActive.setOnClickListener {
+            logicRb(binding.rbNonActive)
+        }
+
+        binding.rbNonActive.setOnClickListener {
+            logicRb(binding.rbActive)
+        }
+
         binding.btnSubmit.setOnClickListener {
             _CreateKaryawan()
         }
@@ -58,6 +67,13 @@ class CreateVoucerActivity : AppCompatActivity() {
         }
         selectedDateTextView2.setOnClickListener {
             showDatePickerDialog2()
+        }
+    }
+
+    private fun logicRb(clickedRadioButton: RadioButton) {
+        if (clickedRadioButton.isChecked) {
+            binding.rbActive.isChecked = clickedRadioButton == binding.rbNonActive
+            binding.rbNonActive.isChecked = clickedRadioButton == binding.rbActive
         }
     }
 

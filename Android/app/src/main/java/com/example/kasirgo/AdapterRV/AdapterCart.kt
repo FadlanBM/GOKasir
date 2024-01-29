@@ -79,10 +79,7 @@ class AdapterCart(val item:List<itemCart>, val context: Context, private val cor
             CartSharePreft(context).updatePrice(position,items._Price)
             holder.priceBarang.text=formatIDR(items._Price.toDouble())
             holder.jumCart.text=items._Count
-            if (items._Count.toInt()>=stock){
-                Log.e("itlist",it.toString())
-                holder.btnPlus.isEnabled=false
-            }
+            holder.btnPlus.isEnabled = items._Count.toInt() < stock
 
             val pricee=CartSharePreft(context).getPrice()
             var totalPrice=0
@@ -109,6 +106,7 @@ class AdapterCart(val item:List<itemCart>, val context: Context, private val cor
 
             holder.priceBarang.text=formatIDR(items._Price.toDouble())
             holder.jumCart.text=items._Count
+            holder.btnPlus.isEnabled = items._Count.toInt() < stock
 
             val pricee=CartSharePreft(context).getPrice()
             var totalPrice=0

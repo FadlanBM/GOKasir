@@ -1240,31 +1240,6 @@ const docTemplate = `{
             }
         },
         "/api/transaksi": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Crud Transaksi"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.ResponseDataSuccess"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/response.ResponseError"
-                        }
-                    }
-                }
-            },
             "post": {
                 "consumes": [
                     "application/json"
@@ -1414,6 +1389,42 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/transaksi/barangTransaksi/{id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Crud Transaksi"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Transaksi Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
         "/api/transaksi/calculatePoint/{id}": {
             "post": {
                 "consumes": [
@@ -1475,6 +1486,42 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Voucer Code",
                         "name": "code",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseDataSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/transaksi/{id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Crud Transaksi"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Id Petugas",
+                        "name": "id",
                         "in": "path",
                         "required": true
                     }
@@ -1782,7 +1829,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "barang_id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "quantity": {
                     "type": "integer"
@@ -1820,9 +1867,6 @@ const docTemplate = `{
                 },
                 "nominal_pembayaran": {
                     "type": "number"
-                },
-                "point": {
-                    "type": "integer"
                 },
                 "ppn": {
                     "type": "number"

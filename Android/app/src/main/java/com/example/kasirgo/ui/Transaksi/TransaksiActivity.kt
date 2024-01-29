@@ -241,7 +241,6 @@ class TransaksiActivity : AppCompatActivity() {
         tvpoint.text=point
 
         add.setOnClickListener {
-            binding.tvTotalPointMemberTran.text="- ${formatIDR(point.toDouble())}"
             binding.tvNameMemberTransaksi.text=nama
             binding.tvCodeMemberTransaksi.text=code
             pointOb.value=point.toInt()
@@ -287,7 +286,9 @@ class TransaksiActivity : AppCompatActivity() {
                             dialog.dismiss()
                         }
                         else{
-                            Toast.makeText(this@TransaksiActivity,"Code Voucer tidak di temukkan",Toast.LENGTH_SHORT).show()
+                            val json=JSONObject(body!!)
+                            val message=json.getString("Message")
+                            Toast.makeText(this@TransaksiActivity,message,Toast.LENGTH_SHORT).show()
                         }
                     }
                 }catch (e:Exception){

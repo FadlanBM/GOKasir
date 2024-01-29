@@ -21,6 +21,5 @@ type RequestTransaksi struct {
 	Kembalian         float64 `json:"kembalian"`
 	KaryawanID        float64 `json:"karyawan_id"`
 	CodeVoucer        string  `json:"code_voucer"`
-	Point             uint    `json:"point"`
 	MemberID          int     `json:"member_id"`
 }
