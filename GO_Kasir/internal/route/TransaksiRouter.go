@@ -9,6 +9,7 @@ func TransaksiRoute(c fiber.Router) {
 	app := c.Group("/transaksi")
 	/*	app.Use(middleware.APIKeyAuthMiddleware)
 	 */app.Get("/:id", Transaksi.Index)
+	app.Get("/detail/:id", Transaksi.IndexDetail)
 	app.Get("/WithQr/:code", Transaksi.DetailQR)
 	app.Post("/addmember", Transaksi.AddMember)
 	app.Get("/voucher/:code", Transaksi.ValidasiVoucer)

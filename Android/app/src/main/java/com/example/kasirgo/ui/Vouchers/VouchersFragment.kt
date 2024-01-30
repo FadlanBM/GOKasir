@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
@@ -47,6 +48,7 @@ class VouchersFragment : Fragment() {
     }
 
     private fun _GetVoucer() {
+        binding.PBVoucherData.isVisible=true
         lifecycleScope.launch() {
             withContext(Dispatchers.IO) {
                 try {
@@ -72,7 +74,8 @@ class VouchersFragment : Fragment() {
                         var statusVoucer=""
                         val jsonVoucer = JSONObject(body!!)
                         val dataVoucer=jsonVoucer.getJSONArray("Data")
-                           for(i in 0 until dataVoucer.length()){
+                        binding.PBVoucherData.isVisible=false
+                        for(i in 0 until dataVoucer.length()){
                                val jsonObject=dataVoucer.getJSONObject(i)
                                val id=jsonObject.getString("ID")
                                val codeVoucer=jsonObject.getString("code")

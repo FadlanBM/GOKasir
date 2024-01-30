@@ -156,6 +156,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
+                android:id="@+id/ll_member_transaksi"
                 android:orientation="horizontal">
 
                 <TextView
@@ -179,6 +180,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
+                android:id="@+id/ll_voucher_transaksi"
                 android:orientation="horizontal">
 
                 <TextView
@@ -207,8 +209,11 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/adapter_cart_transaksi" />
         </LinearLayout>
-
     </ScrollView>
-
-
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:id="@+id/PB_DetailTransaksi"/>
 </RelativeLayout>

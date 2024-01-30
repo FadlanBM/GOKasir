@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.example.kasirgo.MenuAdminActivity
 import com.example.kasirgo.Util.BaseAPI
@@ -41,6 +42,7 @@ class CreateMemberActivity : AppCompatActivity() {
     }
 
     private fun _CreateMember() {
+        binding.PBCreateMember.isVisible=true
         val handler = CoroutineExceptionHandler { _, e ->
             if (e is Exception) {
                 AlertDialog.Builder(this)
@@ -96,6 +98,7 @@ class CreateMemberActivity : AppCompatActivity() {
 
 
                 withContext(Dispatchers.Main) {
+                    binding.PBCreateMember.isVisible=false
                     if (code in 200 until 300){
                         AlertDialog.Builder(this@CreateMemberActivity)
                             .setTitle("Information")
@@ -117,7 +120,7 @@ class CreateMemberActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         val intent=Intent(this,MenuAdminActivity::class.java)
-        intent.putExtra("back","karyawan")
+        intent.putExtra("back","member")
         startActivity(intent)
         super.onBackPressed()
     }

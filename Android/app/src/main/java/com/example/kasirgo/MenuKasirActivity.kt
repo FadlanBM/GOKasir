@@ -9,6 +9,7 @@ import androidx.viewpager.widget.ViewPager
 import com.example.kasirgo.AdaptorTL.AdapterMenuTL
 import com.example.kasirgo.Util.SharePref
 import com.example.kasirgo.Util.SharePreftLogin
+import com.example.kasirgo.Util.SharePreftTransaksi
 import com.example.kasirgo.databinding.ActivityMenuKasirBinding
 import com.google.android.material.tabs.TabLayout
 
@@ -22,6 +23,7 @@ class MenuKasirActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding=ActivityMenuKasirBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        clearSharePreftTransaksi()
 
         tabLayout=binding.tlMenu
         viewPager=binding.vpMenu
@@ -69,5 +71,9 @@ class MenuKasirActivity : AppCompatActivity() {
             doubleBackToExitPressedOnce = false
         }, 2000)
 
+    }
+
+    private fun clearSharePreftTransaksi(){
+        SharePreftTransaksi().clear()
     }
 }

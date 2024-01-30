@@ -40,7 +40,7 @@ class DetailTransaksiActivity : AppCompatActivity() {
         recyclerView=binding.rvcartBarangPembelian
         recyclerView.layoutManager= LinearLayoutManager(this)
         setContentView(binding.root)
-        _GetKaryawan()
+        _GetTransaksi()
 
         binding.btnRowBack.setOnClickListener {
             val intent = Intent(this, MenuKasirActivity::class.java)
@@ -49,12 +49,13 @@ class DetailTransaksiActivity : AppCompatActivity() {
         }
     }
 
-    private fun _GetKaryawan() {
+    private fun _GetTransaksi() {
+        binding.PBDetailTransaksi.isVisible=true
         lifecycleScope.launch() {
             withContext(Dispatchers.IO) {
-                val karyawan_id= SharePreftLogin.id_user
+                val transaksi_id= intent.getStringExtra("id_transaksi")
                 val conn =
-                    URL("${BaseAPI.BaseAPI}/api/transaksi/$karyawan_id").openConnection() as HttpURLConnection
+                    URL("${BaseAPI.BaseAPI}/api/transaksi/detail/$transaksi_id").openConnection() as HttpURLConnection
                 conn.requestMethod = "GET"
                 conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                 conn.setRequestProperty("Content-Type", "application/json")
@@ -69,7 +70,7 @@ class DetailTransaksiActivity : AppCompatActivity() {
 
 
                 withContext(Dispatchers.Main) {
-                    var idTransaksi:String=""
+                    var idTransaksi=""
                     val jsonKaryawan = JSONObject(body!!)
                     val dataKaryawan=jsonKaryawan.getJSONArray("Data")
                     for(i in 0 until dataKaryawan.length()){
@@ -87,10 +88,10 @@ class DetailTransaksiActivity : AppCompatActivity() {
                         binding.tvTotalTransaksiDetailTransaksi.text=formatIDR(totalTransaksi.toDouble())
                         binding.tvNominalPembayaranDetailTransaksi.text=formatIDR(nominalPembayaran.toDouble())
                         binding.tvNominalKembalianDetailTransaksi.text=formatIDR(nominalKembalian.toDouble())
-                        binding.tvMemberNameDetailTransaksi.isVisible = memberName != ""
-                        binding.tvCodeVoucherDetailTransaksi.isVisible = codeVoucher != ""
+                        binding.llMemberTransaksi.isVisible = memberName != ""
+                        binding.llVoucherTransaksi.isVisible = codeVoucher != ""
                         binding.tvMemberNameDetailTransaksi.text=memberName
-                        binding.tvCodeVoucherDetailTransaksi.text=memberName
+                        binding.tvCodeVoucherDetailTransaksi.text=codeVoucher
                         binding.tvNominalPPnDetailTransaksi.text=formatIDR(ppn.toDouble())
                     }
                     _GetBarang(idTransaksi)
@@ -129,6 +130,7 @@ class DetailTransaksiActivity : AppCompatActivity() {
                         val price=barang.getString("price")
                         dataList.add(itemPembelianBarang(id,namaBarang,price,codebarang,quantity))
                     }
+                    binding.PBDetailTransaksi.isVisible=false
                     val adapter= AdapterListBarangPembelian(dataList,this@DetailTransaksiActivity)
                     recyclerView.adapter=adapter
                 }

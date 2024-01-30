@@ -36,6 +36,4 @@
         app:cornerRadius="@dimen/_10sdp"
         app:icon="@drawable/buy_for_change_50px"
         android:id="@+id/btn_Transaksi"/>
-
-
 </RelativeLayout>

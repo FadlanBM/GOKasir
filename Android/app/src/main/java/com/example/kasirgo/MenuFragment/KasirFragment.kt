@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ProgressBar
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -84,6 +85,8 @@ class KasirFragment : Fragment() {
     }
 
 
+
+
     private fun getData(view: View) {
         lifecycleScope.launch {
             val dataCartList = mutableListOf<itemCart>()
@@ -99,8 +102,6 @@ class KasirFragment : Fragment() {
                          conn.setRequestProperty("Authorization", "Bearer ${SharePref.token}")
                         conn.setRequestProperty("Content-Type", "application/json")
                         val code = conn.responseCode
-                        Log.e("data", code.toString())
-
                         val body = if (code in 200 until 300) {
                             conn.inputStream?.bufferedReader()?.use { it.readLine() }
                         } else {
@@ -127,7 +128,6 @@ class KasirFragment : Fragment() {
                             }
                         }
                         withContext(Dispatchers.Main) {
-                            Log.e("database", dataCartList.toString())
                             val adapter = AdapterCart(dataCartList, requireContext(), lifecycleScope, viewLifecycleOwner,view)
                             recyclerView.adapter = adapter
                         }

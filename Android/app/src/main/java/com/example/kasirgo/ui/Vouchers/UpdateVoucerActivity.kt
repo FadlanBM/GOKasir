@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RadioButton
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.example.kasirgo.MenuAdminActivity
 import com.example.kasirgo.Util.BaseAPI
@@ -153,8 +154,6 @@ class UpdateVoucerActivity : AppCompatActivity() {
 
                     withContext(Dispatchers.Main) {
                         val json = JSONObject(body!!)
-                        Log.e("Hasil",json.toString())
-
                         if (code in 200 until 300){
                             AlertDialog.Builder(this@UpdateVoucerActivity)
                                 .setTitle("Information")
@@ -181,6 +180,7 @@ class UpdateVoucerActivity : AppCompatActivity() {
     }
 
     private fun _GetDataBarang(id:String) {
+        binding.PBVoucherUpdate.isVisible=true
         lifecycleScope.launch() {
             withContext(Dispatchers.IO) {
                 try {
@@ -208,6 +208,7 @@ class UpdateVoucerActivity : AppCompatActivity() {
                     withContext(Dispatchers.Main) {
                         val karyawanJson= JSONObject(body!!)
                         val listvoucer=karyawanJson.getJSONArray("Data")
+                        binding.PBVoucherUpdate.isVisible=false
                         for (i in 0 until listvoucer.length()){
                             val datavoucer=listvoucer.getJSONObject(i)
                             val startDate=datavoucer.getString("start_date")

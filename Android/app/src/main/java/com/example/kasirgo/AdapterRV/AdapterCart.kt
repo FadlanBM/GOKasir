@@ -54,7 +54,6 @@ class AdapterCart(val item:List<itemCart>, val context: Context, private val cor
         holder.codeBarang.text=items._CodeBarang
         result.value=items._Count.toInt()
         val priceSave=items.Default_Price
-        val stock=CartSharePreft(context).getLimitCart()[position].toInt()
 
         readresuld.observe(lifecycleOwner){
             items._Count=it.toString()
@@ -69,6 +68,7 @@ class AdapterCart(val item:List<itemCart>, val context: Context, private val cor
         holder.priceBarang.text=formatIDR(items._Price.toDouble())
 
         holder.btnPlus.setOnClickListener {
+            val stock=CartSharePreft(context).getLimitCart()[position].toInt()
             addCount(position)
             readresuld.observe(lifecycleOwner){
                 items._Price=(priceSave.toInt()*it).toString()
@@ -95,6 +95,7 @@ class AdapterCart(val item:List<itemCart>, val context: Context, private val cor
         }
 
         holder.btnMinus.setOnClickListener {
+            val stock=CartSharePreft(context).getLimitCart()[position].toInt()
             minusCount(position)
             readresuld.observe(lifecycleOwner){
                 items._Price=(priceSave.toInt()*it).toString()

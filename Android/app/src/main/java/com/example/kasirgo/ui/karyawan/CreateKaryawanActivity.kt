@@ -8,6 +8,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.example.kasirgo.MenuAdminActivity
 import com.example.kasirgo.R
@@ -46,6 +47,7 @@ class CreateKaryawanActivity : AppCompatActivity() {
     }
 
     private fun _GetToko() {
+        binding.PBCreateKaryawan.isVisible=true
         lifecycleScope.launch() {
             withContext(Dispatchers.IO) {
                 val conn =
@@ -64,6 +66,7 @@ class CreateKaryawanActivity : AppCompatActivity() {
                     val jsontoko = JSONObject(body!!)
                     val jsonArray=jsontoko.getJSONArray("data")
                     val item =ArrayList<String>()
+                    binding.PBCreateKaryawan.isVisible=false
                     for (i in 0 until jsonArray.length()){
                         val jsonObject=jsonArray.getJSONObject(i)
                         val namaToko=jsonObject.getString("name")

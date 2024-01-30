@@ -133,7 +133,11 @@
             android:layout_marginHorizontal="@dimen/_20sdp"
             android:id="@+id/btnSubmit"
             android:text="Submit"/>
-
     </LinearLayout>
-
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:id="@+id/PB_createAdmin"/>
 </RelativeLayout>

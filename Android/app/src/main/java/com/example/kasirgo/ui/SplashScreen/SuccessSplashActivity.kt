@@ -7,11 +7,13 @@ import android.os.Handler
 import com.example.kasirgo.MenuKasirActivity
 import com.example.kasirgo.R
 import com.example.kasirgo.Util.CartSharePreft
+import com.example.kasirgo.Util.SharePreftTransaksi
 
     class SuccessSplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_success_splash)
+        SharePreftTransaksi().codeVoucer=""
         Handler().postDelayed({
             val intent = Intent(this, MenuKasirActivity::class.java)
             intent.putExtra("status","history")

@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.example.kasirgo.R
 import com.example.kasirgo.Util.BaseAPI
@@ -53,6 +54,7 @@ class UbahDataActivity : AppCompatActivity() {
         }
     }
     private fun _GetToko() {
+        binding.PBUpdatePribadi.isVisible=true
         lifecycleScope.launch() {
             withContext(Dispatchers.IO) {
                 val conn =
@@ -105,6 +107,7 @@ class UbahDataActivity : AppCompatActivity() {
 
 
                 withContext(Dispatchers.Main) {
+                    binding.PBUpdatePribadi.isVisible=false
                     val jsontoko = JSONObject(body!!)
                     val jsonjson=jsontoko.getJSONObject("Data")
                     val nama=jsonjson.getString("name")

@@ -3,6 +3,7 @@ package com.example.kasirgo.ui.setting
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,6 +31,7 @@ class DataPribadiActivity : AppCompatActivity() {
         _GetUser()
     }
     private fun _GetUser() {
+        binding.PBDataPribadi.isVisible=true
         lifecycleScope.launch() {
             withContext(Dispatchers.IO) {
                 try {
@@ -57,6 +59,7 @@ class DataPribadiActivity : AppCompatActivity() {
                             Setting("Username", data.getString("username")),
                             Setting("Phone Number",data.getString("telp")),
                         )
+                        binding.PBDataPribadi.isVisible=false
                         val settingsAdapter = AdapterListData(settingsList,this@DataPribadiActivity)
                         recyclerViewSettings.layoutManager = LinearLayoutManager(this@DataPribadiActivity)
                         recyclerViewSettings.adapter = settingsAdapter

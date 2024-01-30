@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.example.kasirgo.Util.BaseAPI
 import com.example.kasirgo.Util.SharePref
@@ -43,6 +44,7 @@ class ResetPasswordActivity : AppCompatActivity() {
         }
     }
     private fun _ResetPassword() {
+        binding.PBResetPass.isVisible=true
         Log.e("uid",SharePreftLogin.id_user)
         lifecycleScope.launch() {
             withContext(Dispatchers.IO) {
@@ -68,6 +70,7 @@ class ResetPasswordActivity : AppCompatActivity() {
 
                 withContext(Dispatchers.Main) {
                     val jsonKaryawan = JSONObject(body!!)
+                    binding.PBResetPass.isVisible=false
                     if (code !in 200 until 300) {
                         if (code == 400) {
                             Toast.makeText(

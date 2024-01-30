@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.example.kasirgo.MenuAdminActivity
 import com.example.kasirgo.Util.BaseAPI
@@ -43,6 +44,7 @@ class UpdateMemberActivity : AppCompatActivity() {
     }
 
     private fun _GetDataKaryawan(id:String?) {
+        binding.PBUpdateKaryawan.isVisible=true
         lifecycleScope.launch() {
             withContext(Dispatchers.IO) {
                 val conn =
@@ -63,7 +65,7 @@ class UpdateMemberActivity : AppCompatActivity() {
                 withContext(Dispatchers.Main) {
                     val memberJson= JSONObject(body!!)
                     val datamember=memberJson.getJSONObject("Data")
-                    Log.e("data",datamember.toString())
+                    binding.PBUpdateKaryawan.isVisible=false
                     val nama =datamember.getString("name")
                     val alamat =datamember.getString("address")
                     val phone =datamember.getString("phone")

@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
@@ -43,6 +44,8 @@ class KaryawanFragment : Fragment() {
     }
 
     private fun _GetKaryawan() {
+        binding.PBKaryawan.isVisible=true
+        binding.btnAdd
         lifecycleScope.launch() {
             withContext(Dispatchers.IO) {
                 val datakarlist= mutableListOf<itemKaryawan>()
@@ -66,6 +69,7 @@ class KaryawanFragment : Fragment() {
                         val nik=jsonObject.getString("nik")
                         datakarlist.add(itemKaryawan(id,nama,nik))
                     }
+                    binding.PBKaryawan.isVisible=false
                     val adapter=AdapterListKaryawan(datakarlist!!,requireContext(),lifecycleScope)
                     recyclerView.adapter=adapter
                 }

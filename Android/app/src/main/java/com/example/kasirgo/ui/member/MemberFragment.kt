@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
@@ -49,6 +50,7 @@ class MemberFragment : Fragment() {
     }
 
     private fun _GetMember() {
+        binding.PBMember.isVisible=true
         lifecycleScope.launch() {
             withContext(Dispatchers.IO) {
                 val datakarlist= mutableListOf<itemMember>()
@@ -67,8 +69,8 @@ class MemberFragment : Fragment() {
 
                 withContext(Dispatchers.Main) {
                     val jsonKaryawan = JSONObject(body!!)
-                    Log.e("json",jsonKaryawan.toString())
                     val dataKaryawan=jsonKaryawan.getJSONArray("Data")
+                    binding.PBMember.isVisible=false
                     for(i in 0 until dataKaryawan.length()){
                         val jsonObject=dataKaryawan.getJSONObject(i)
                         val id=jsonObject.getString("ID")

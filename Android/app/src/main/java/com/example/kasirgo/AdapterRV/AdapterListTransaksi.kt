@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
@@ -36,9 +37,7 @@ class AdapterListTransaksi(val item:List<itemTransaksi>, val context: Context):R
         val totalPrice=view.findViewById<TextView>(R.id.tvTotalTransaksi_Transaksi)
         val nominalPembayaran=view.findViewById<TextView>(R.id.tvNominalPembayaran_Transaksi)
         val nominalKembalian=view.findViewById<TextView>(R.id.tvNominalKembalian_Transaksi)
-        val memberName=view.findViewById<TextView>(R.id.tvMemberName_Transaksi)
         val nominalPPn=view.findViewById<TextView>(R.id.tvNominalPPN_Transaksi)
-        val voucherCode=view.findViewById<TextView>(R.id.tvCodeVoucher_Transaksi)
         val detailBtn=view.findViewById<Button>(R.id.btnDetailTransaksi)
 
     }
@@ -57,16 +56,10 @@ class AdapterListTransaksi(val item:List<itemTransaksi>, val context: Context):R
         holder.nominalPembayaran.text=formatIDR(items.nominalPembayaran.toDouble())
         holder.nominalPPn.text=formatIDR(items.ppn.toDouble())
         holder.nominalKembalian.text=formatIDR(items.nominalKembalian.toDouble())
-        holder.voucherCode.isVisible = items.codeVoucher != ""
-        if (items.memberName==""){
-          holder.memberName.isVisible=false
-        }else{
-            holder.memberName.isVisible=true
-            holder.memberName.text=items.memberName
-        }
-        holder.voucherCode.text=items.codeVoucher
         holder.detailBtn.setOnClickListener {
-            context.startActivity(Intent(context,DetailTransaksiActivity::class.java))
+            val intent=Intent(context,DetailTransaksiActivity::class.java)
+            intent.putExtra("id_transaksi",items.id)
+            context.startActivity(intent)
         }
     }
 

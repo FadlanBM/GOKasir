@@ -8,6 +8,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.example.kasirgo.MenuAdminActivity
 import com.example.kasirgo.R
@@ -52,6 +53,7 @@ class CreateAdminActivity : AppCompatActivity() {
     }
 
     private fun _GetToko() {
+        binding.PBCreateAdmin.isVisible=true
         lifecycleScope.launch() {
             withContext(Dispatchers.IO) {
                 val conn = URL("${BaseAPI.BaseAPI}/api/tokoprofile").openConnection() as HttpURLConnection
@@ -68,6 +70,7 @@ class CreateAdminActivity : AppCompatActivity() {
                     val jsontoko = JSONObject(body!!)
                     val jsonArray=jsontoko.getJSONArray("data")
                     val item =ArrayList<String>()
+                    binding.PBCreateAdmin.isVisible=false
                     for (i in 0 until jsonArray.length()){
                         val jsonObject=jsonArray.getJSONObject(i)
                         val namaToko=jsonObject.getString("name")

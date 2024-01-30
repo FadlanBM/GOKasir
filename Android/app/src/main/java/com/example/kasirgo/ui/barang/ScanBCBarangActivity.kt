@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.budiyev.android.codescanner.AutoFocusMode
 import com.budiyev.android.codescanner.CodeScanner
@@ -115,6 +116,7 @@ class ScanBCBarangActivity : AppCompatActivity() {
     }
 
     private fun getData(id:String) {
+        binding.PBSCQR.isVisible=true
         lifecycleScope.launch() {
             withContext(Dispatchers.IO) {
                 try {
@@ -130,8 +132,6 @@ class ScanBCBarangActivity : AppCompatActivity() {
                             )
                         conn.setRequestProperty("Content-Type", "application/json")
                         val code = conn.responseCode
-                        Log.e("data", code.toString())
-
                         val body = if (code in 200 until 300) {
                             conn.inputStream?.bufferedReader()?.use { it.readLine() }
                         } else {
@@ -140,7 +140,8 @@ class ScanBCBarangActivity : AppCompatActivity() {
                         withContext(Dispatchers.Main) {
                             var IsStatus=false
                             var IsCountLimit=true
-                             if (code in 200 until 300) {
+                            binding.PBSCQR.isVisible=false
+                            if (code in 200 until 300) {
                                  val jsonKaryawan = JSONObject(body!!)
                                  val dataKaryawan=jsonKaryawan.getJSONArray("Data")
                                  for(i in 0 until dataKaryawan.length()) {

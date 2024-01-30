@@ -7,6 +7,4 @@ data class itemTransaksi (
     val ppn:String,
     val nominalKembalian:String,
     val namaKaryawan:String,
-    val codeVoucher:String,
-    val memberName:String,
 )

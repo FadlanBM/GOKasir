@@ -33,36 +33,83 @@ func Index(c *fiber.Ctx) error {
 		return c.Status(400).JSON(fiber.Map{"Status": "Error", "Message": err.Error()})
 	}
 
-	// Query transaksi menggunakan pointer
 	if err := config.DB.Find(&transaksi, "karyawan_id = ?", id).Error; err != nil {
 		return c.Status(500).JSON(fiber.Map{"Message": err.Error(), "Status": "Internal Server Error"})
 	}
-
-	// Handle jika transaksi kosong
 	if len(transaksi) == 0 {
 		return c.Status(404).JSON(fiber.Map{"Status": "Error", "Message": "Record not found"})
-	}
-
-	// Query karyawan menggunakan pointer
-	if err := config.DB.First(&karyawan, transaksi[0].KaryawanID).Error; err != nil {
-		handleRecordNotFoundError(c, err, "Karyawan")
-	}
-
-	if transaksi[0].MemberID != 0 {
-		if err := config.DB.First(&member, transaksi[0].MemberID).Error; err != nil {
-			handleRecordNotFoundError(c, err, "Member")
-		}
-	}
-
-	if transaksi[0].VoucerID != 0 {
-		if err := config.DB.First(&voucher, transaksi[0].VoucerID).Error; err != nil {
-			handleRecordNotFoundError(c, err, "Voucher")
-		}
 	}
 
 	var res []response.TransaksiResponse
 
 	for _, v := range transaksi {
+		if err := config.DB.First(&karyawan, v.KaryawanID).Error; err != nil {
+			handleRecordNotFoundError(c, err, "Karyawan")
+		}
+
+		if err := config.DB.First(&member, v.MemberID).Error; err != nil {
+			handleRecordNotFoundError(c, err, "Member")
+		}
+		if err := config.DB.First(&voucher, v.VoucerID).Error; err != nil {
+			handleRecordNotFoundError(c, err, "Voucher")
+		}
+		transaksiResponse := response.TransaksiResponse{
+			ID:                v.ID,
+			TotalPrice:        v.TotalPrice,
+			NominalPembayaran: v.NominalTunai,
+			Ppn:               v.PPN,
+			Kembalian:         v.Kembalian,
+			NamaKaryawan:      karyawan.Nama_Karyawan,
+			CodeVoucer:        voucher.Code,
+			MemberName:        member.Name,
+		}
+		res = append(res, transaksiResponse)
+	}
+
+	return c.Status(200).JSON(fiber.Map{"Message": "Success", "Data": res})
+}
+
+// IndexDetail godoc
+// @Tags Crud Transaksi
+// @Accept json
+// @Produce json
+// @Param id path string true "Id Transaksi"
+// @Success 200 {object} response.ResponseDataSuccess
+// @Failure 400 {object} response.ResponseError
+// @Router /api/transaksi/detail/{id} [get]
+func IndexDetail(c *fiber.Ctx) error {
+	var transaksi []models.Transaksi
+	var member models.Member
+	var voucher models.Voucer
+	var karyawan models.Karyawan
+
+	idParam := c.Params("id")
+
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		return c.Status(400).JSON(fiber.Map{"Status": "Error", "Message": err.Error()})
+	}
+
+	if err := config.DB.First(&transaksi, id).Error; err != nil {
+		return c.Status(500).JSON(fiber.Map{"Message": err.Error(), "Status": "Internal Server Error"})
+	}
+	if len(transaksi) == 0 {
+		return c.Status(404).JSON(fiber.Map{"Status": "Error", "Message": "Record not found"})
+	}
+
+	var res []response.TransaksiResponse
+
+	for _, v := range transaksi {
+		if err := config.DB.First(&karyawan, v.KaryawanID).Error; err != nil {
+			handleRecordNotFoundError(c, err, "Karyawan")
+		}
+
+		if err := config.DB.First(&member, v.MemberID).Error; err != nil {
+			handleRecordNotFoundError(c, err, "Member")
+		}
+		if err := config.DB.First(&voucher, v.VoucerID).Error; err != nil {
+			handleRecordNotFoundError(c, err, "Voucher")
+		}
 		transaksiResponse := response.TransaksiResponse{
 			ID:                v.ID,
 			TotalPrice:        v.TotalPrice,
@@ -147,11 +194,11 @@ func AddMember(c *fiber.Ctx) error {
 	}
 
 	if err := config.DB.First(member, "code_member = ?", req.CodeMember).Error; err != nil {
-		return c.Status(400).JSON(fiber.Map{"Status": "error", "Message": err.Error()})
+		return c.Status(400).JSON(fiber.Map{"Status": "error", "Message": "Code Member tidak di temukan"})
 	}
 
 	if err := helper.VerivHash(member.Password, req.Password); err != nil {
-		return c.Status(400).JSON(fiber.Map{"Status": "error", "Message": err.Error()})
+		return c.Status(400).JSON(fiber.Map{"Status": "error", "Message": "Password Member Salah"})
 	}
 
 	return c.Status(200).JSON(fiber.Map{"Status": "success", "Message": "Member Valid", "Data": member})
@@ -415,16 +462,15 @@ func GetBarangTransaksi(c *fiber.Ctx) error {
 		return c.Status(404).JSON(fiber.Map{"Status": "Error", "Message": "Record not found"})
 	}
 
-	if err := config.DB.First(&barang, pembelianBarang[0].BarangID).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return c.Status(404).JSON(fiber.Map{"Status": "Error", "Message": "Record not found"})
-		}
-		return c.Status(500).JSON(fiber.Map{"Status": "Error", "Message": err.Error()})
-	}
-
 	var res []response.BarangPembelianResponse
 
 	for _, v := range pembelianBarang {
+		if err := config.DB.First(&barang, v.BarangID).Error; err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				return c.Status(404).JSON(fiber.Map{"Status": "Error", "Message": "Record not found"})
+			}
+			return c.Status(500).JSON(fiber.Map{"Status": "Error", "Message": err.Error()})
+		}
 		pembelianBarangResponse := response.BarangPembelianResponse{
 			ID:         v.ID,
 			NamaBarang: barang.Name,

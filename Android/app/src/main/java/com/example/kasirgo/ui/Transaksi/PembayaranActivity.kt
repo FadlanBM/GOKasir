@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
@@ -37,8 +38,6 @@ class PembayaranActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPembayaranBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
         val totalPembelian = SharePreftTransaksi().totalPrice
         binding.tvTotalPembelian.text = formatIDR(totalPembelian.toDouble())
 
@@ -46,10 +45,9 @@ class PembayaranActivity : AppCompatActivity() {
             if (binding.tiPembayaran.text!!.isEmpty()) {
                 binding.tiPembayaran.error = "Form Jumlah pembayaran masih kosong"
             } else {
-
                 val input = binding.tiPembayaran.text?.toString()
-
                 val inputBersih = input?.replace(Regex("[^0-9]"), "")
+
                 try {
                     val hasil = inputBersih?.toInt()
                     if (hasil != null) {
@@ -62,7 +60,7 @@ class PembayaranActivity : AppCompatActivity() {
                 }
                 readPembayaran.observe(this) {
                     if (it < totalPembelian) {
-                        binding.tiPembayaran.error = "JumlahPembayaran Kurang"
+                        binding.tiPembayaran.error = "Jumlah Pembayaran Kurang"
                         binding.tvKembalian.text = "-"
                         binding.tvTotalPembayaran.text = "-"
                     } else {
@@ -99,6 +97,7 @@ class PembayaranActivity : AppCompatActivity() {
     }
 
     private fun _AddTransaksi(kembalian: Int) {
+        binding.PBSubmit.isVisible=true
         lifecycleScope.launch() {
             withContext(Dispatchers.IO) {
                 try {
@@ -129,9 +128,7 @@ class PembayaranActivity : AppCompatActivity() {
                             put("total_price", totalPembayaran)
                         }.toString())
                     }
-
                     val code = conn.responseCode
-
                     val body = if (code in 200 until 300) {
                         conn.inputStream?.bufferedReader()?.use { it.readLine() }
                     } else {
@@ -143,7 +140,7 @@ class PembayaranActivity : AppCompatActivity() {
                             if (code == 400) {
                                 Toast.makeText(
                                     this@PembayaranActivity,
-                                    "TransaksiError",
+                                    "Transaksi Error",
                                     Toast.LENGTH_SHORT
                                 ).show()
                             } else {
@@ -158,12 +155,11 @@ class PembayaranActivity : AppCompatActivity() {
                             val id_member = SharePreftTransaksi().member_id
                             val transaksiData=json.getJSONObject("Data")
                             val idTransaksi=transaksiData.getString("ID")
-                            Log.e("Test", id_member.toString())
                             if (id_member != 0) {
                                 _AddPoint(id_member.toString())
                             }
                             _AddBarang(idTransaksi)
-                            clearSharePreftTransaksi()
+                            binding.PBSubmit.isVisible=false
                             startActivity(
                                 Intent(
                                     this@PembayaranActivity,
@@ -179,14 +175,6 @@ class PembayaranActivity : AppCompatActivity() {
 
         }
 
-    }
-
-    private fun clearSharePreftTransaksi(){
-        SharePreftTransaksi().codeVoucer=""
-        SharePreftTransaksi().member_id=0
-        SharePreftTransaksi().ppn=0
-        SharePreftTransaksi().totalPrice=0
-        SharePreftTransaksi().point=0
     }
 
     private fun _AddPoint(idMember: String) {
@@ -205,16 +193,13 @@ class PembayaranActivity : AppCompatActivity() {
                             put("total_price", totalPembayaran)
                         }.toString())
                     }
-
                     val code = conn.responseCode
-
                     val body = if (code in 200 until 300) {
                         conn.inputStream?.bufferedReader()?.use { it.readLine() }
                     } else {
                         conn.errorStream?.bufferedReader()?.use { it.readLine() }
                     }
                     withContext(Dispatchers.Main) {
-                        Log.e("body", body.toString())
                         if (code !in 200 until 300) {
                             if (code == 400) {
                                 Toast.makeText(
@@ -279,9 +264,7 @@ class PembayaranActivity : AppCompatActivity() {
                                 }.toString()
                             )
                         }
-
                         val code = conn.responseCode
-
                         val body = if (code in 200 until 300) {
                             conn.inputStream?.bufferedReader()?.use { it.readLine() }
                         } else {
@@ -289,7 +272,6 @@ class PembayaranActivity : AppCompatActivity() {
                         }
 
                         withContext(Dispatchers.Main) {
-                            Log.e("body3", body.toString())
                             if (code !in 200 until 300) {
                                 if (code == 400) {
                                     Toast.makeText(

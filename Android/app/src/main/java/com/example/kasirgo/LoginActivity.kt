@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.example.kasirgo.Util.BaseAPI
 import com.example.kasirgo.Util.SharePref
@@ -79,6 +80,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun login() {
+        binding.PBLogin.isVisible=true
         val handler = CoroutineExceptionHandler { _, e ->
             if (e is Exception) {
                 AlertDialog.Builder(this)
@@ -124,6 +126,7 @@ class LoginActivity : AppCompatActivity() {
                     }
                     withContext(Dispatchers.Main) {
                         val json = JSONObject(body!!)
+                        binding.PBLogin.isVisible=false
                         if (code !in 200 until 300) {
                             if (code == 400) {
                                 Toast.makeText(

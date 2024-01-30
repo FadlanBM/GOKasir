@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
@@ -173,6 +174,13 @@ class TransaksiActivity : AppCompatActivity() {
         val tvCode=dialog.findViewById<EditText>(R.id.tiCodeMemberTran)
         val tvPassword=dialog.findViewById<EditText>(R.id.tiPasswordMemberTran)
         buttonValidasi.setOnClickListener {
+            if (tvCode.text.isEmpty()){
+                tvCode.error="Form Code masih kosong"
+            }
+            if (tvPassword.text.isEmpty()){
+                tvPassword.error="Form Password masih kosong"
+            }
+            if (tvCode.text.isEmpty()||tvPassword.text.isEmpty()) return@setOnClickListener
             _CreateMember(tvCode.text.toString(),tvPassword.text.toString(),dialog)
         }
         buttonCancel.setOnClickListener {
@@ -334,14 +342,19 @@ class TransaksiActivity : AppCompatActivity() {
                         val point=member.getString("point")
                         showModalAddMember(code,nama_member,alamat,point)
                         idMembermut.value=idMember.toInt()
+                        dialog.dismiss()
+                    }else{
+                        val json=JSONObject(body!!)
+                        val message=json.getString("Message")
+                        Toast.makeText(this@TransaksiActivity,message,Toast.LENGTH_SHORT).show()
                     }
-                    dialog.dismiss()
                 }
             }
         }
     }
 
     private fun getData() {
+        binding.PBTransaksi.isVisible=true
         lifecycleScope.launch {
             val dataCartList = mutableListOf<itemCart>()
             withContext(Dispatchers.IO) {
@@ -381,7 +394,7 @@ class TransaksiActivity : AppCompatActivity() {
                             }
                         }
                         withContext(Dispatchers.Main) {
-                            Log.e("database", dataCartList.toString())
+                            binding.PBTransaksi.isVisible=false
                             val adapter = AdapterListBarangTransaksi(dataCartList, this@TransaksiActivity, this@TransaksiActivity)
                             recyclerView.adapter = adapter
                         }
@@ -390,6 +403,7 @@ class TransaksiActivity : AppCompatActivity() {
 
                 } catch (e: Exception) {
                     Log.e("Error ", e.toString())
+                    binding.PBTransaksi.isVisible=false
                 }
             }
         }
